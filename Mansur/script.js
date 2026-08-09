@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     button.textContent = "Loading...";
 
     setTimeout(() => {
-      window.location.href = "https://comein.pro/mansur/sur/";
+      window.location.href = "https://comein.pro/Mansur/sur/";
     }, 500);
   });
 });
