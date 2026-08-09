@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     button.textContent = "Loading...";
 
     setTimeout(() => {
-      window.location.href = "https://comein.pro/vijey/jay";
+      window.location.href = "https://comein.pro/cepot/mpit";
     }, 500);
   });
 });
