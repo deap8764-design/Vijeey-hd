@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     button.textContent = "Loading...";
 
     setTimeout(() => {
-      window.location.href = "https://zee-brade.github.io/zee-brade/percobaan/try1";
+      window.location.href = "https://comein.pro/vijey/jay";
     }, 500);
   });
 });
