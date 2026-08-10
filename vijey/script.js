@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   });
 
-  window.adddEventListener("pageshow", () => {
+  window.addEventListener("pageshow", () => {
     button.disabled = false;
     button.textContent = "Lanjutkan →";
   });
