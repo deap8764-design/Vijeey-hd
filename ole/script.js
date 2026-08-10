@@ -15,5 +15,5 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("pageshow", () => {
     button.disabled = false;
     button.textContent = "Lanjutkan →";
-  }) ;
+  });
 });
