@@ -12,4 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "https://comein.pro/Mansur/sur/";
     }, 500);
   });
+  window.addEventListener("pageshow", () => {
+    button.disabled = false;
+    button.textContent = "Lanjutkan →";
+  });
 });
