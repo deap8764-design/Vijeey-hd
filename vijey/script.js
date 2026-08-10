@@ -12,4 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "https://comein.pro/vijey/jay";
     }, 500);
   });
+
+  window.adddEventListener("pageshow", () => {
+    button.disabled = false;
+    button.textContent = " Lanjutkan →";
+  });
 });
