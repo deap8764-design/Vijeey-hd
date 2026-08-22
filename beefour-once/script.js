@@ -2197,7 +2197,7 @@ window.addEventListener(
         google.ima.ViewMode.NORMAL
       );
 
-    }
+    
 
   }
 );
