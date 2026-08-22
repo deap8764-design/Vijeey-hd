@@ -13,7 +13,8 @@
 */
 
 const SMARTLINK_URL = "https://www.profitableratecpmnetwork.com/t43u33iyx5?key=2ae9dfead6d65bda1889c6a2e30810b1";
-
+const VAST_AD_TAG_URL =
+  "https://vast.yomeno.xyz/vast?spot_id=1499640";
 /*
   Jika Popunder provider Anda menggunakan script <script src="..."></script>
   di <head>, provider tersebut dapat berjalan sendiri.
@@ -1372,6 +1373,262 @@ function renderDetail(slug) {
 }
 
 /* =========================================================
+   CLICKADILLA VAST / GOOGLE IMA
+   ========================================================= */
+
+let vast = {
+  adDisplayContainer: null,
+  adsLoader: null,
+  adsManager: null,
+  adContainer: null,
+  video: null,
+  initialized: false
+};
+
+
+function setupVASTPlayer() {
+  const video = document.getElementById("mainVideo");
+  const adContainer = document.getElementById("vastAdContainer");
+
+  if (!video || !adContainer) {
+    return;
+  }
+
+  vast.video = video;
+  vast.adContainer = adContainer;
+
+  // Hindari membuat AdsLoader berkali-kali.
+  if (vast.initialized) {
+    return;
+  }
+
+  if (
+    typeof google === "undefined" ||
+    !google.ima
+  ) {
+    console.warn("Google IMA SDK belum tersedia.");
+    return;
+  }
+
+  vast.adDisplayContainer =
+    new google.ima.AdDisplayContainer(
+      adContainer,
+      video
+    );
+
+  vast.adsLoader =
+    new google.ima.AdsLoader(
+      vast.adDisplayContainer
+    );
+
+  vast.adsLoader.addEventListener(
+    google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
+    onVASTManagerLoaded,
+    false
+  );
+
+  vast.adsLoader.addEventListener(
+    google.ima.AdErrorEvent.Type.AD_ERROR,
+    onVASTError,
+    false
+  );
+
+  vast.initialized = true;
+}
+
+
+function requestVASTAd() {
+  const video = document.getElementById("mainVideo");
+
+  if (!video) {
+    return;
+  }
+
+  setupVASTPlayer();
+
+  if (
+    !vast.adsLoader ||
+    !vast.adDisplayContainer
+  ) {
+    console.warn("VAST player belum siap.");
+    video.play().catch(() => {});
+    return;
+  }
+
+  // Wajib berasal dari user gesture di mobile.
+  try {
+    vast.adDisplayContainer.initialize();
+  } catch (error) {
+    console.warn(
+      "IMA initialize gagal:",
+      error
+    );
+  }
+
+  if (vast.adsManager) {
+    vast.adsManager.destroy();
+    vast.adsManager = null;
+  }
+
+  const adsRequest =
+    new google.ima.AdsRequest();
+
+  adsRequest.adTagUrl =
+    VAST_AD_TAG_URL;
+
+  adsRequest.linearAdSlotWidth =
+    video.clientWidth || 640;
+
+  adsRequest.linearAdSlotHeight =
+    video.clientHeight || 360;
+
+  adsRequest.nonLinearAdSlotWidth =
+    video.clientWidth || 640;
+
+  adsRequest.nonLinearAdSlotHeight =
+    Math.round(
+      (video.clientWidth || 640) * 0.25
+    );
+
+  vast.adsLoader.requestAds(
+    adsRequest
+  );
+}
+
+
+function onVASTManagerLoaded(
+  adsManagerLoadedEvent
+) {
+
+  const video =
+    document.getElementById("mainVideo");
+
+  if (!video) {
+    return;
+  }
+
+  const adContainer =
+    document.getElementById(
+      "vastAdContainer"
+    );
+
+  const adsRenderingSettings =
+    new google.ima.AdsRenderingSettings();
+
+  adsRenderingSettings
+    .restoreCustomPlaybackStateOnAdBreakComplete = true;
+
+  vast.adsManager =
+    adsManagerLoadedEvent.getAdsManager(
+      video,
+      adsRenderingSettings
+    );
+
+  vast.adsManager.addEventListener(
+    google.ima.AdErrorEvent.Type.AD_ERROR,
+    onVASTError
+  );
+
+  vast.adsManager.addEventListener(
+    google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
+    () => {
+
+      video.pause();
+
+      if (adContainer) {
+        adContainer.classList.add("active");
+      }
+    }
+  );
+
+  vast.adsManager.addEventListener(
+    google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
+    () => {
+
+      if (adContainer) {
+        adContainer.classList.remove("active");
+      }
+
+      video.play().catch(() => {});
+    }
+  );
+
+  vast.adsManager.addEventListener(
+    google.ima.AdEvent.Type.LOADED,
+    (event) => {
+
+      const ad = event.getAd();
+
+      // Kalau iklannya non-linear,
+      // content tetap boleh berjalan.
+      if (
+        ad &&
+        !ad.isLinear()
+      ) {
+        video.play().catch(() => {});
+      }
+    }
+  );
+
+  try {
+
+    vast.adsManager.init(
+      video.clientWidth || 640,
+      video.clientHeight || 360,
+      google.ima.ViewMode.NORMAL
+    );
+
+    vast.adsManager.start();
+
+  } catch (error) {
+
+    console.warn(
+      "Gagal memulai VAST:",
+      error
+    );
+
+    onVASTError();
+  }
+}
+
+
+function onVASTError(error) {
+
+  console.warn(
+    "VAST / IMA error:",
+    error || "unknown"
+  );
+
+  const adContainer =
+    document.getElementById(
+      "vastAdContainer"
+    );
+
+  if (adContainer) {
+    adContainer.classList.remove(
+      "active"
+    );
+  }
+
+  if (vast.adsManager) {
+    try {
+      vast.adsManager.destroy();
+    } catch (_) {}
+
+    vast.adsManager = null;
+  }
+
+  const video =
+    document.getElementById(
+      "mainVideo"
+    );
+
+  if (video) {
+    video.play().catch(() => {});
+  }
+    }
+
+/* =========================================================
    VIDEO PLAYER CONTROL
    ========================================================= */
 
@@ -1456,21 +1713,13 @@ button.classList.add("active");
 
   video.load();
 
-
-  /*
-    Coba autoplay setelah
-    user melakukan klik episode.
-    
-    Karena pemicunya adalah user gesture,
-    browser biasanya mengizinkan playback.
-  */
-
-  const playPromise =
-    video.play();
-
-
-  if (playPromise !== undefined) {
-
+/*
+  Jalankan VAST terlebih dahulu.
+  Setelah iklan selesai, IMA akan
+  mengirim CONTENT_RESUME_REQUESTED
+  dan video content dilanjutkan.
+*/
+requestVASTAd();
     playPromise
 
       .then(() => {
@@ -1569,33 +1818,6 @@ function setupVideoEvents() {
 
 }
 
-function setupVideoSmartlinkArea() {
-  const video = document.getElementById("mainVideo");
-
-  if (!video) return;
-
-  // Hindari event terpasang berkali-kali
-  if (video.dataset.smartlinkReady === "1") return;
-
-  video.dataset.smartlinkReady = "1";
-
-  video.addEventListener("click", () => {
-    // Masih cooldown
-    if (!state.smartlinkReady) return;
-
-    // Smartlink belum diisi
-    if (!SMARTLINK_URL || SMARTLINK_URL.includes("example.com")) {
-      console.warn("SMARTLINK_URL belum diisi.");
-      return;
-    }
-
-    const url =
-      `${SMARTLINK_URL}&ref=video-area`;
-
-    // Jalankan Smartlink
-    triggerSmartlink(url);
-  });
-}
 /* =========================================================
    RENDER
    ========================================================= */
@@ -1668,7 +1890,7 @@ function render() {
   if (route.name === "detail") {
 
     setupVideoEvents();
-    setupVideoSmartlinkArea();
+    setupVASTPlayer();
 
   }
 
@@ -1963,6 +2185,17 @@ window.addEventListener(
     ) {
 
       closeSidebar();
+    }
+    if (
+      vast.adsManager &&
+      vast.video
+    ) {
+
+      vast.adsManager.resize(
+        vast.video.clientWidth,
+        vast.video.clientHeight,
+        google.ima.ViewMode.NORMAL
+      );
 
     }
 
