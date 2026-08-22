@@ -23,7 +23,7 @@ const VAST_AD_TAG_URL =
 */
 const POPUNDER_URL = "https://example.com/popunder?utm_source=enjoywatch";
 
-const SMARTLINK_COOLDOWN_MS = 10000;
+const SMARTLINK_COOLDOWN_MS = 90000;
 const POPUNDER_COOLDOWN_MS = 15000;
 
 const app = document.getElementById("app");
