@@ -14,7 +14,7 @@
 
 const SMARTLINK_URL = "https://www.profitableratecpmnetwork.com/t43u33iyx5?key=2ae9dfead6d65bda1889c6a2e30810b1";
 const VAST_AD_TAG_URL =
-  "https://vast.yomeno.xyz/vast?spot_id=1499640";
+  "..";
 /*
   Jika Popunder provider Anda menggunakan script <script src="..."></script>
   di <head>, provider tersebut dapat berjalan sendiri.
@@ -176,43 +176,43 @@ const catalog = {
           ep: 1,
           label: "Bagian 1",
           url: `${SMARTLINK_URL}&ref=1-102-ep1`,
-          src: "../Screenrecorder-2026-07-06-06-33-56-618.mp4"
+          src: "../VID-20260809-WA0142.mp4"
         },
         {
           ep: 2,
           label: "Bagian 2",
           url: `${SMARTLINK_URL}&ref=1-102-ep2`,
-          src: "https://raw.githubusercontent.com/username/repo/main/1-102-ep2.mp4"
+          src: "../VID-20260809-WA0105.mp4"
         },
         {
           ep: 3,
           label: "Bagian 3",
           url: `${SMARTLINK_URL}&ref=1-102-ep3`,
-          src: "https://raw.githubusercontent.com/username/repo/main/1-102-ep3.mp4"
+          src: "../VID-20260809-WA0104.mp4"
         },
         {
           ep: 4,
           label: "Bagian 4",
           url: `${SMARTLINK_URL}&ref=1-102-ep4`,
-          src: "https://raw.githubusercontent.com/username/repo/main/1-102-ep4.mp4"
+          src: "../VID-20260809-WA0103.mp4"
         },
         {
           ep: 5,
           label: "Bagian 5",
           url: `${SMARTLINK_URL}&ref=1-102-ep5`,
-          src: "https://raw.githubusercontent.com/username/repo/main/1-102-ep5.mp4"
+          src: "../VID-20260809-WA0102.mp4"
         },
         {
           ep: 6,
           label: "Bagian 6",
           url: `${SMARTLINK_URL}&ref=1-102-ep6`,
-          src: "https://raw.githubusercontent.com/username/repo/main/1-102-ep6.mp4"
+          src: "../VID-20260809-WA0101.mp4"
         },
         {
           ep: 7,
           label: "Bagian 7",
           url: `${SMARTLINK_URL}&ref=1-102-ep7`,
-          src: "https://raw.githubusercontent.com/username/repo/main/1-102-ep7.mp4"
+          src: "../VID-20260809-WA0100.mp4"
         }
       ]
     },
@@ -228,43 +228,31 @@ const catalog = {
           ep: 1,
           label: "Bagian 1",
           url: `${SMARTLINK_URL}&ref=3-627-ep1`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep1.mp4"
+          src: "../assets/VID-20260809-WA0049.mp4"
         },
         {
           ep: 2,
           label: "Bagian 2",
           url: `${SMARTLINK_URL}&ref=3-627-ep2`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep2.mp4"
+          src: "../assets/VID-20260809-WA0050.mp4"
         },
         {
           ep: 3,
           label: "Bagian 3",
           url: `${SMARTLINK_URL}&ref=3-627-ep3`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep3.mp4"
+          src: "../assets/VID-20260809-WA0051.mp4"
         },
         {
           ep: 4,
           label: "Bagian 4",
           url: `${SMARTLINK_URL}&ref=3-627-ep4`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep4.mp4"
+          src: "../assets/VID-20260809-WA0052.mp4"
         },
         {
           ep: 5,
           label: "Bagian 5",
           url: `${SMARTLINK_URL}&ref=3-627-ep5`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep5.mp4"
-        },
-        {
-          ep: 6,
-          label: "Bagian 6",
-          url: `${SMARTLINK_URL}&ref=3-627-ep6`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep6.mp4"
-        },
-        {
-          ep: 7,
-          label: "Bagian 7",
-          url: `${SMARTLINK_URL}&ref=3-627-ep7`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep7.mp4"
+          src: "../assets/VID-20260809-WA0053.mp4"
         }
       ]
     },
@@ -280,43 +268,61 @@ const catalog = {
           ep: 1,
           label: "Bagian 1",
           url: `${SMARTLINK_URL}&ref=Prime-Pack-ep1`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep1.mp4"
+          src: "../assets/VID-20260809-WA0069.mp4"
         },
         {
           ep: 2,
           label: "Bagian 2",
           url: `${SMARTLINK_URL}&ref=Prime-Pack-ep2`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep2.mp4"
+          src: "../assets/VID-20260809-WA0070.mp4"
         },
         {
           ep: 3,
           label: "Bagian 3",
           url: `${SMARTLINK_URL}&ref=Prime-Pack-ep3`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep3.mp4"
+          src: "../assets/VID-20260809-WA0071.mp4"
         },
         {
           ep: 4,
           label: "Bagian 4",
           url: `${SMARTLINK_URL}&ref=Prime-Pack-ep4`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep4.mp4"
+          src: "../assets/VID-20260809-WA0072.mp4"
         },
         {
           ep: 5,
           label: "Bagian 5",
           url: `${SMARTLINK_URL}&ref=Prime-Pack-ep5`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep5.mp4"
+          src: "../assets/VID-20260809-WA0073.mp4"
         },
         {
           ep: 6,
           label: "Bagian 6",
           url: `${SMARTLINK_URL}&ref=Prime-Pack-ep6`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep6.mp4"
+          src: "../assets/VID-20260809-WA0087.mp4"
         },
         {
           ep: 7,
           label: "Bagian 7",
           url: `${SMARTLINK_URL}&ref=Prime-Pack-ep7`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep7.mp4"
+          src: "../assets/VID-20260809-WA0089.mp4"
+        },
+        {
+          ep: 8,
+          label: "Bagian 8",
+          url: `${SMARTLINK_URL}&ref=Prime-Pack-ep7`,
+          src: "../assets/VID-20260809-WA0090.mp4"
+          },
+        {
+          ep: 9,
+          label: "Bagian 9",
+          url: `${SMARTLINK_URL}&ref=Prime-Pack-ep7`,
+          src: "../assets/VID-20260809-WA0091.mp4"
+        },
+        {
+          ep: 10,
+          label: "Bagian 10",
+          url: `${SMARTLINK_URL}&ref=Prime-Pack-ep7`,
+          src: "../assets/VID-20260809-WA0092.mp4"
         }
       ]
     },
@@ -332,43 +338,43 @@ const catalog = {
           ep: 1,
           label: "Bagian 1",
           url: `${SMARTLINK_URL}&ref=Hot-Picks-ep1`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep1.mp4"
+          src: "../assets/ln1/VID-20260809-WA0128.mp4"
         },
         {
           ep: 2,
           label: "Bagian 2",
           url: `${SMARTLINK_URL}&ref=Hot-Picks-ep2`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep2.mp4"
+          src: "../assets/ln1/VID-20260809-WA0111.mp4"
         },
         {
           ep: 3,
           label: "Bagian 3",
           url: `${SMARTLINK_URL}&ref=Hot-Picks-ep3`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep3.mp4"
+          src: "../assets/ln1/VID-20260809-WA0110.mp4"
         },
         {
           ep: 4,
           label: "Bagian 4",
           url: `${SMARTLINK_URL}&ref=Hot-Picks-ep4`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep4.mp4"
+          src: "../assets/ln1/VID-20260809-WA0109.mp4"
         },
         {
           ep: 5,
           label: "Bagian 5",
           url: `${SMARTLINK_URL}&ref=Hot-Picks-ep5`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep5.mp4"
+          src: "../assets/ln1/VID-20260809-WA0108.mp4"
         },
         {
           ep: 6,
           label: "Bagian 6",
           url: `${SMARTLINK_URL}&ref=Hot-Picks-ep6`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep6.mp4"
+          src: "../assets/ln1/VID-20260809-WA0107.mp4"
         },
         {
           ep: 7,
           label: "Bagian 7",
           url: `${SMARTLINK_URL}&ref=Hot-Picks-ep7`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep7.mp4"
+          src: "../assets/ln1/VID-20260809-WA0106.mp4"
         }
       ]
     },
@@ -392,43 +398,49 @@ const catalog = {
           ep: 1,
           label: "Bagian 1",
           url: `${SMARTLINK_URL}&ref=Fresh-Drop-ep1`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep1.mp4"
+          src: "../assets/ln2/VID-20260809-WA0096.mp4"
         },
         {
           ep: 2,
           label: "Bagian 2",
           url: `${SMARTLINK_URL}&ref=Fresh-Drop-ep2`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep2.mp4"
+          src: "../assets/ln2/VID-20260809-WA0095.mp4"
         },
         {
           ep: 3,
           label: "Bagian 3",
           url: `${SMARTLINK_URL}&ref=Fresh-Drop-ep3`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep3.mp4"
+          src: "../assets/ln2/VID-20260809-WA0127.mp4"
         },
         {
           ep: 4,
           label: "Bagian 4",
           url: `${SMARTLINK_URL}&ref=Fresh-Drop-ep4`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep4.mp4"
+          src: "../assets/ln2/VID-20260809-WA0126.mp4"
         },
         {
           ep: 5,
           label: "Bagian 5",
           url: `${SMARTLINK_URL}&ref=Fresh-Drop-ep5`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep5.mp4"
+          src: "../assets/ln2/VID-20260809-WA0125.mp4"
         },
         {
           ep: 6,
           label: "Bagian 6",
           url: `${SMARTLINK_URL}&ref=Fresh-Drop-ep6`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep6.mp4"
+          src: "../assets/ln2/VID-20260808-WA0158.mp4"
         },
         {
           ep: 7,
           label: "Bagian 7",
           url: `${SMARTLINK_URL}&ref=Fresh-Drop-ep7`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep7.mp4"
+          src: "../assets/ln2/VID-20260808-WA0160.mp4"
+        },   
+        {
+          ep: 8,
+          label: "Bagian 8",
+          url: `${SMARTLINK_URL}&ref=Fresh-Drop-ep7`,
+          src: "../assets/ln2/VID-20260808-WA0161.mp4"
         }
       ]
     },
@@ -444,43 +456,31 @@ const catalog = {
           ep: 1,
           label: "Bagian 1",
           url: `${SMARTLINK_URL}&ref=Daily-Mix-ep1`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep1.mp4"
+          src: "../assets/ln3/VID-20260809-WA0119.mp4"
         },
         {
           ep: 2,
           label: "Bagian 2",
           url: `${SMARTLINK_URL}&ref=Daily-Mix-ep2`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep2.mp4"
+          src: "../assets/ln3/VID-20260809-WA0118.mp4"
         },
         {
           ep: 3,
           label: "Bagian 3",
           url: `${SMARTLINK_URL}&ref=Daily-Mix-ep3`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep3.mp4"
+          src: "../assets/ln3/VID-20260809-WA0117.mp4"
         },
         {
           ep: 4,
           label: "Bagian 4",
           url: `${SMARTLINK_URL}&ref=Daily-Mix-ep4`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep4.mp4"
+          src: "../assets/ln3/VID-20260809-WA0116.mp4"
         },
         {
           ep: 5,
           label: "Bagian 5",
           url: `${SMARTLINK_URL}&ref=Daily-Mix-ep5`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep5.mp4"
-        },
-        {
-          ep: 6,
-          label: "Bagian 6",
-          url: `${SMARTLINK_URL}&ref=Daily-Mix-ep6`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep6.mp4"
-        },
-        {
-          ep: 7,
-          label: "Bagian 7",
-          url: `${SMARTLINK_URL}&ref=Daily-Mix-ep7`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep7.mp4"
+          src: "../assets/ln3/VID-20260809-WA0115.mp4"
         }
       ]
     },
@@ -496,43 +496,61 @@ const catalog = {
           ep: 1,
           label: "Bagian 1",
           url: `${SMARTLINK_URL}&ref=Top-10-ep1`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep1.mp4"
+          src: "../assets/myvid/VID-20260809-WA0132.mp4"
         },
         {
           ep: 2,
           label: "Bagian 2",
           url: `${SMARTLINK_URL}&ref=Top-10-ep2`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep2.mp4"
+          src: "../assets/myvid/VID-20260809-WA0129.mp4"
         },
         {
           ep: 3,
           label: "Bagian 3",
           url: `${SMARTLINK_URL}&ref=Top-10-ep3`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep3.mp4"
+          src: "../assets/myvid/VID-20260809-WA0124.mp4"
         },
         {
           ep: 4,
           label: "Bagian 4",
           url: `${SMARTLINK_URL}&ref=Top-10-ep4`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep4.mp4"
+          src: "../assets/myvid/VID-20260809-WA0120.mp4"
         },
         {
           ep: 5,
           label: "Bagian 5",
           url: `${SMARTLINK_URL}&ref=Top-10-ep5`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep5.mp4"
+          src: "../assets/myvid/VID-20260809-WA0096.mp4"
         },
         {
           ep: 6,
           label: "Bagian 6",
           url: `${SMARTLINK_URL}&ref=Top-10-ep6`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep6.mp4"
+          src: "../assets/myvid/VID-20260809-WA0093.mp4"
         },
         {
           ep: 7,
           label: "Bagian 7",
           url: `${SMARTLINK_URL}&ref=Top-10-ep7`,
-          src: "https://raw.githubusercontent.com/username/repo/main/3-627-ep7.mp4"
+          src: "../assets/myvid/VID-20260809-WA0051.mp4"
+        },
+        {
+          ep: 8,
+          label: "Bagian 8",
+          url: `${SMARTLINK_URL}&ref=Top-10-ep7`,
+          src: "../assets/myvid/VID-20260809-WA0051.mp4"
+        },
+        {
+          ep: 9,
+          label: "Bagian 9",
+          url: `${SMARTLINK_URL}&ref=Top-10-ep7`,
+          src: "../assets/myvid/VID-20260809-WA0051.mp4"
+        },
+        {
+          ep: 10,
+          label: "Bagian 10",
+          url: `${SMARTLINK_URL}&ref=Top-10-ep7`,
+          src: "../assets/myvid/VID-20260809-WA0051.mp4"
         }
       ]
     }
