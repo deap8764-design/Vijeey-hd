@@ -2183,9 +2183,9 @@ window.addEventListener(
     if (
       window.innerWidth > 768
     ) {
-
       closeSidebar();
     }
+
     if (
       vast.adsManager &&
       vast.video
@@ -2197,11 +2197,10 @@ window.addEventListener(
         google.ima.ViewMode.NORMAL
       );
 
-    
+    }
 
   }
 );
-
 
 /* =========================================================
    ESCAPE SIDEBAR
