@@ -1711,7 +1711,7 @@ button.classList.add("active");
     Reload video
   */
 
-  video.load();
+    video.load();
 
 /*
   Jalankan VAST terlebih dahulu.
@@ -1720,33 +1720,27 @@ button.classList.add("active");
   dan video content dilanjutkan.
 */
 requestVASTAd();
+
+  // 1. Tambahkan deklarasi untuk memutar video
+  const playPromise = video.play();
+
+  // 2. Tambahkan pengecekan kondisi pemutaran (Blok IF)
+  if (playPromise !== undefined) {
     playPromise
-
       .then(() => {
-
         if (status) {
-
-          status.textContent =
-            `Sedang memutar EP ${episodeNumber}`;
-
+          status.textContent = `Sedang memutar EP ${episodeNumber}`;
         }
-
       })
-
       .catch(() => {
-
         if (status) {
-
-          status.textContent =
-            `EP ${episodeNumber} siap diputar. Tekan tombol Play.`;
-
+          status.textContent = `EP ${episodeNumber} siap diputar. Tekan tombol Play.`;
         }
-
       });
+  } // <--- Tanda tutup ini sekarang memiliki pasangan (Blok IF)
 
-  }
+} // Tanda penutup fungsi playEpisode()
 
-}
 
 /* =========================================================
    VIDEO ERROR / LOADED
