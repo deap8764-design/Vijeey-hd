@@ -1319,8 +1319,174 @@ function renderDetail(slug) {
             Browser Anda tidak mendukung pemutaran video HTML5.
         </video>
         <div id="vastAdContainer" class="vast-ad-container"></div>
+        <!-- CUSTOM VIDEO CONTROLS -->
+    <div class="custom-controls" id="customControls">
+
+      <!-- PLAY -->
+      <button
+        id="playPauseBtn"
+        class="video-control-btn"
+        type="button"
+        title="Play / Pause"
+      >
+        ▶
+      </button>
+
+      <!-- MUNDUR -->
+      <button
+        id="rewindBtn"
+        class="video-control-btn"
+        type="button"
+        title="Mundur 10 detik"
+      >
+        ↶
+      </button>
+
+      <!-- MAJU -->
+      <button
+        id="forwardBtn"
+        class="video-control-btn"
+        type="button"
+        title="Maju 10 detik"
+      >
+        ↷
+      </button>
+
+      <!-- CURRENT TIME -->
+      <span
+        id="videoCurrentTime"
+        class="video-time"
+      >
+        0:00
+      </span>
+
+      <!-- PROGRESS -->
+      <input
+        id="videoProgress"
+        class="video-progress"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        step="0.1"
+      >
+
+      <!-- DURATION -->
+      <span
+        id="videoDuration"
+        class="video-time"
+      >
+        0:00
+      </span>
+
+      <div class="video-spacer"></div>
+
+      <!-- VOLUME -->
+      <div class="volume-control">
+
+        <button
+          id="muteBtn"
+          class="video-control-btn"
+          type="button"
+          title="Mute"
+        >
+          🔊
+        </button>
+
+        <input
+          id="volumeRange"
+          class="volume-range"
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value="1"
+        >
+
+      </div>
+
+      <!-- QUALITY -->
+      <div class="quality-control">
+
+        <button
+          id="qualityBtn"
+          class="video-control-btn"
+          type="button"
+          title="Kualitas"
+        >
+          ⚙
+        </button>
+
+        <div
+          id="qualityMenu"
+          class="quality-menu"
+        >
+          <button
+            type="button"
+            class="quality-option active"
+            data-quality="auto"
+          >
+            Auto
+          </button>
+
+          <button
+            type="button"
+            class="quality-option"
+            data-quality="1080p"
+          >
+            1080p
+          </button>
+
+          <button
+            type="button"
+            class="quality-option"
+            data-quality="720p"
+          >
+            720p
+          </button>
+
+          <button
+            type="button"
+            class="quality-option"
+            data-quality="480p"
+          >
+            480p
+          </button>
+
+          <button
+            type="button"
+            class="quality-option"
+            data-quality="360p"
+          >
+            360p
+          </button>
+        </div>
+
+      </div>
+
+      <!-- PiP -->
+      <button
+        id="pipBtn"
+        class="video-control-btn"
+        type="button"
+        title="Picture in Picture"
+      >
+        ▣
+      </button>
+
+      <!-- FULLSCREEN -->
+      <button
+        id="fullscreenBtn"
+        class="video-control-btn"
+        type="button"
+        title="Fullscreen"
+      >
+        ⛶
+      </button>
 
     </div>
+
+  </div>
 
     <div id="videoStatus" class="video-status">
         Pilih episode untuk mulai menonton.
@@ -1759,6 +1925,755 @@ requestVASTAd();
 
 } // Tanda penutup fungsi playEpisode()
 
+/* =========================================================
+   CUSTOM VIDEO PLAYER CONTROLS
+   ========================================================= */
+
+let customPlayerReady = false;
+let controlHideTimer = null;
+
+
+function formatTime(seconds){
+
+  if (!Number.isFinite(seconds)){
+    return "0:00";
+  }
+
+  const minutes =
+    Math.floor(seconds / 60);
+
+  const secs =
+    Math.floor(seconds % 60)
+      .toString()
+      .padStart(2, "0");
+
+  return `${minutes}:${secs}`;
+}
+
+
+function showCustomControls(){
+
+  const shell =
+    document.getElementById(
+      "videoShell"
+    );
+
+  if (!shell){
+    return;
+  }
+
+  shell.classList.remove(
+    "controls-hidden"
+  );
+
+  clearTimeout(
+    controlHideTimer
+  );
+
+  controlHideTimer =
+    setTimeout(() => {
+
+      const video =
+        document.getElementById(
+          "mainVideo"
+        );
+
+      if (
+        video &&
+        !video.paused
+      ){
+
+        shell.classList.add(
+          "controls-hidden"
+        );
+
+      }
+
+    }, 3000);
+
+}
+
+
+function setupCustomVideoPlayer(){
+
+  const video =
+    document.getElementById(
+      "mainVideo"
+    );
+
+  const shell =
+    document.getElementById(
+      "videoShell"
+    );
+
+  const playBtn =
+    document.getElementById(
+      "playPauseBtn"
+    );
+
+  const rewindBtn =
+    document.getElementById(
+      "rewindBtn"
+    );
+
+  const forwardBtn =
+    document.getElementById(
+      "forwardBtn"
+    );
+
+  const muteBtn =
+    document.getElementById(
+      "muteBtn"
+    );
+
+  const volumeRange =
+    document.getElementById(
+      "volumeRange"
+    );
+
+  const progress =
+    document.getElementById(
+      "videoProgress"
+    );
+
+  const currentTime =
+    document.getElementById(
+      "videoCurrentTime"
+    );
+
+  const duration =
+    document.getElementById(
+      "videoDuration"
+    );
+
+  const qualityBtn =
+    document.getElementById(
+      "qualityBtn"
+    );
+
+  const qualityMenu =
+    document.getElementById(
+      "qualityMenu"
+    );
+
+  const pipBtn =
+    document.getElementById(
+      "pipBtn"
+    );
+
+  const fullscreenBtn =
+    document.getElementById(
+      "fullscreenBtn"
+    );
+
+
+  if (
+    !video ||
+    !shell ||
+    customPlayerReady
+  ){
+    return;
+  }
+
+
+  customPlayerReady = true;
+
+
+  /* PLAY / PAUSE */
+
+  function togglePlay(){
+
+    if (video.paused){
+
+      video.play()
+        .catch(() => {});
+
+    } else {
+
+      video.pause();
+
+    }
+
+  }
+
+
+  playBtn?.addEventListener(
+    "click",
+    (event) => {
+
+      event.stopPropagation();
+
+      togglePlay();
+
+      showCustomControls();
+
+    }
+  );
+
+
+  video.addEventListener(
+    "play",
+    () => {
+
+      if (playBtn){
+        playBtn.textContent = "❚❚";
+      }
+
+    }
+  );
+
+
+  video.addEventListener(
+    "pause",
+    () => {
+
+      if (playBtn){
+        playBtn.textContent = "▶";
+      }
+
+      showCustomControls();
+
+    }
+  );
+
+
+  /* REWIND 10 */
+
+  rewindBtn?.addEventListener(
+    "click",
+    (event) => {
+
+      event.stopPropagation();
+
+      video.currentTime =
+        Math.max(
+          0,
+          video.currentTime - 10
+        );
+
+      showCustomControls();
+
+    }
+  );
+
+
+  /* FORWARD 10 */
+
+  forwardBtn?.addEventListener(
+    "click",
+    (event) => {
+
+      event.stopPropagation();
+
+      if (!Number.isFinite(video.duration)){
+        return;
+      }
+
+      video.currentTime =
+        Math.min(
+          video.duration,
+          video.currentTime + 10
+        );
+
+      showCustomControls();
+
+    }
+  );
+
+
+  /* PROGRESS */
+
+  video.addEventListener(
+    "loadedmetadata",
+    () => {
+
+      if (duration){
+
+        duration.textContent =
+          formatTime(
+            video.duration
+          );
+
+      }
+
+    }
+  );
+
+
+  video.addEventListener(
+    "timeupdate",
+    () => {
+
+      if (currentTime){
+
+        currentTime.textContent =
+          formatTime(
+            video.currentTime
+          );
+
+      }
+
+      if (
+        progress &&
+        Number.isFinite(
+          video.duration
+        ) &&
+        video.duration > 0
+      ){
+
+        progress.value =
+          (
+            video.currentTime /
+            video.duration
+          ) * 100;
+
+      }
+
+    }
+  );
+
+
+  progress?.addEventListener(
+    "input",
+    () => {
+
+      if (
+        !Number.isFinite(
+          video.duration
+        )
+      ){
+        return;
+      }
+
+      video.currentTime =
+        (
+          Number(progress.value) /
+          100
+        ) * video.duration;
+
+      showCustomControls();
+
+    }
+  );
+
+
+  /* VOLUME */
+
+  function updateVolumeIcon(){
+
+    if (!muteBtn){
+      return;
+    }
+
+    if (
+      video.muted ||
+      video.volume === 0
+    ){
+
+      muteBtn.textContent = "🔇";
+
+    } else if (
+      video.volume < 0.5
+    ){
+
+      muteBtn.textContent = "🔉";
+
+    } else {
+
+      muteBtn.textContent = "🔊";
+
+    }
+
+  }
+
+
+  volumeRange?.addEventListener(
+    "input",
+    (event) => {
+
+      const value =
+        Number(
+          event.target.value
+        );
+
+      video.volume = value;
+
+      video.muted =
+        value === 0;
+
+      updateVolumeIcon();
+
+      showCustomControls();
+
+    }
+  );
+
+
+  muteBtn?.addEventListener(
+    "click",
+    (event) => {
+
+      event.stopPropagation();
+
+      video.muted =
+        !video.muted;
+
+      if (
+        !video.muted &&
+        video.volume === 0
+      ){
+
+        video.volume = 0.8;
+
+      }
+
+      if (volumeRange){
+
+        volumeRange.value =
+          video.volume;
+
+      }
+
+      updateVolumeIcon();
+
+      showCustomControls();
+
+    }
+  );
+
+
+  /* QUALITY MENU */
+
+  qualityBtn?.addEventListener(
+    "click",
+    (event) => {
+
+      event.stopPropagation();
+
+      qualityMenu?.classList.toggle(
+        "open"
+      );
+
+      showCustomControls();
+
+    }
+  );
+
+
+  document
+    .querySelectorAll(
+      ".quality-option"
+    )
+    .forEach((option) => {
+
+      option.addEventListener(
+        "click",
+        (event) => {
+
+          event.stopPropagation();
+
+          const quality =
+            option.dataset.quality;
+
+          changeVideoQuality(
+            quality
+          );
+
+          document
+            .querySelectorAll(
+              ".quality-option"
+            )
+            .forEach((item) => {
+
+              item.classList.remove(
+                "active"
+              );
+
+            });
+
+          option.classList.add(
+            "active"
+          );
+
+          qualityMenu?.classList.remove(
+            "open"
+          );
+
+          showCustomControls();
+
+        }
+      );
+
+    });
+
+
+  /* PICTURE IN PICTURE */
+
+  pipBtn?.addEventListener(
+    "click",
+    async (event) => {
+
+      event.stopPropagation();
+
+      try{
+
+        if (
+          document.pictureInPictureElement
+        ){
+
+          await document.exitPictureInPicture();
+
+        } else if (
+          document.pictureInPictureEnabled
+        ){
+
+          await video.requestPictureInPicture();
+
+        }
+
+      } catch (error){
+
+        console.warn(
+          "PiP tidak tersedia:",
+          error
+        );
+
+      }
+
+      showCustomControls();
+
+    }
+  );
+
+
+  /* FULLSCREEN */
+
+  fullscreenBtn?.addEventListener(
+    "click",
+    async (event) => {
+
+      event.stopPropagation();
+
+      try{
+
+        if (
+          document.fullscreenElement
+        ){
+
+          await document.exitFullscreen();
+
+        } else {
+
+          await shell.requestFullscreen();
+
+        }
+
+      } catch (error){
+
+        console.warn(
+          "Fullscreen gagal:",
+          error
+        );
+
+      }
+
+      showCustomControls();
+
+    }
+  );
+
+
+  /* SHOW / HIDE */
+
+  shell.addEventListener(
+    "mousemove",
+    showCustomControls
+  );
+
+  shell.addEventListener(
+    "touchstart",
+    showCustomControls,
+    {
+      passive:true
+    }
+  );
+
+
+  /*
+    Klik video:
+    play / pause.
+  */
+
+  video.addEventListener(
+    "click",
+    (event) => {
+
+      event.stopPropagation();
+
+      togglePlay();
+
+      showCustomControls();
+
+    }
+  );
+
+
+  /* CLOSE QUALITY MENU */
+
+  document.addEventListener(
+    "click",
+    (event) => {
+
+      if (
+        !qualityMenu ||
+        !qualityBtn
+      ){
+        return;
+      }
+
+      if (
+        !qualityMenu.contains(
+          event.target
+        ) &&
+        !qualityBtn.contains(
+          event.target
+        )
+      ){
+
+        qualityMenu.classList.remove(
+          "open"
+        );
+
+      }
+
+    }
+  );
+
+
+  if (volumeRange){
+
+    volumeRange.value =
+      video.volume;
+
+  }
+
+  updateVolumeIcon();
+  showCustomControls();
+
+}
+
+
+/* =========================================================
+   QUALITY SWITCH
+   ========================================================= */
+
+function changeVideoQuality(
+  quality
+){
+
+  const video =
+    document.getElementById(
+      "mainVideo"
+    );
+
+  if (!video){
+    return;
+  }
+
+
+  /*
+    Kalau video belum punya
+    sumber multi-resolution,
+    jangan lakukan apa-apa.
+  */
+
+  if (
+    !video.dataset.qualitySources
+  ){
+
+    if (quality !== "auto"){
+
+      console.log(
+        `Resolusi ${quality} belum tersedia untuk video ini.`
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  let sources;
+
+  try{
+
+    sources =
+      JSON.parse(
+        video.dataset.qualitySources
+      );
+
+  } catch (error){
+
+    console.warn(
+      "Quality source tidak valid:",
+      error
+    );
+
+    return;
+
+  }
+
+
+  const newSource =
+    sources[quality] ||
+    sources.auto;
+
+  if (!newSource){
+    return;
+  }
+
+
+  const currentTime =
+    video.currentTime;
+
+  const wasPlaying =
+    !video.paused;
+
+
+  video.src =
+    newSource;
+
+  video.load();
+
+
+  video.addEventListener(
+    "loadedmetadata",
+    function restorePosition(){
+
+      video.removeEventListener(
+        "loadedmetadata",
+        restorePosition
+      );
+
+      video.currentTime =
+        Math.min(
+          currentTime,
+          video.duration || currentTime
+        );
+
+      if (wasPlaying){
+
+        video.play()
+          .catch(() => {});
+
+      }
+
+    }
+  );
+
+      }
+
 
 /* =========================================================
    VIDEO ERROR / LOADED
@@ -1903,6 +2818,7 @@ function render() {
 
     setupVideoEvents();
     setupVASTPlayer();
+    setupCustomVideoPlayer();
 
   }
 
