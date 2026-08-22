@@ -1318,6 +1318,8 @@ function renderDetail(slug) {
         >
             Browser Anda tidak mendukung pemutaran video HTML5.
         </video>
+        <div id="vastAdContainer" class="vast-ad-container"></div>
+        </div>
         <!-- CUSTOM VIDEO CONTROLS -->
     <div class="custom-controls" id="customControls">
 
@@ -1484,10 +1486,7 @@ function renderDetail(slug) {
       </button>
 
     </div>
-
   </div>
-  </div>
-  <div id="vastAdContainer" class="vast-ad-container"></div>
 
     <div id="videoStatus" class="video-status">
         Pilih episode untuk mulai menonton.
