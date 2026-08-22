@@ -261,7 +261,159 @@
 
         <p style="margin-top: 35px; font-size: 13px; color: #ffffff; font-weight: bold;">🤤🤤🤤</p>
 
-    </div> <script>
+    </div> 
+    <!-- BUTTON -->
+<div class="more-btn-wrapper">
+    <a href="https://comein.pro/beefour-once/"
+       class="more-btn"
+       target="_blank"
+       rel="noopener noreferrer">
+        <span>Tampilkan Lebih Banyak</span>
+        <span class="more-arrow">→</span>
+    </a>
+</div>
+
+<style>
+.more-btn-wrapper {
+    position: fixed;
+    right: -1%;
+    top: 85%;
+    transform: translateY(-50%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+.more-btn-wrapper::before {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 150px;
+    background: rgba(25, 20, 35, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    mask-image: radial-gradient(
+        ellipse,
+        black 0%,
+        rgba(0,0,0,0.8) 30%,
+        rgba(0,0,0,0.35) 55%,
+        transparent 80%
+    );
+    -webkit-mask-image: radial-gradient(
+        ellipse,
+        black 0%,
+        rgba(0,0,0,0.8) 30%,
+        rgba(0,0,0,0.35) 55%,
+        transparent 80%
+    );
+    filter: blur(2px);
+    z-index: -1;
+}
+.more-btn {
+    pointer-events: auto;
+    width: fit-content;
+    padding: 8px 9px;
+    font-size: 10px;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 2px;
+    background: linear-gradient(
+        135deg,
+        #8b5cf6 0%,
+        #5b4675 45%,
+        #25252d 100%
+    );
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    box-shadow:
+        0 0 0 rgba(139,92,246,0),
+        0 8px 25px rgba(0,0,0,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    animation: attentionGlow 2.2s ease-in-out infinite;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+@keyframes attentionGlow {
+    0%, 100% {
+        box-shadow:
+            0 0 0 rgba(139,92,246,0),
+            0 8px 25px rgba(0,0,0,0.28),
+            inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    50% {
+        box-shadow:
+            0 0 25px rgba(139,92,246,0.45),
+            0 8px 30px rgba(0,0,0,0.35),
+            inset 0 1px 0 rgba(255,255,255,0.14);
+    }
+}
+.more-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 70%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.18),
+        transparent
+    );
+    transform: skewX(-20deg);
+    animation: buttonShine 3.5s ease-in-out infinite;
+}
+@keyframes buttonShine {
+    0% {
+        left: -120%;
+    }
+    55%,
+    100% {
+        left: 140%;
+    }
+}
+.more-btn span {
+    position: relative;
+    z-index: 2;
+}
+.more-arrow {
+    font-size: 18px;
+    line-height: 1;
+    animation: arrowAttention 1.5s ease-in-out infinite;
+    transition: transform 0.3s ease;
+}
+@keyframes arrowAttention {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(4px);
+    }
+}
+.more-btn:hover {
+    animation-play-state: paused;
+    transform: translateY(-4px);
+    box-shadow:
+        0 0 35px rgba(139,92,246,0.6),
+        0 14px 35px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.more-btn:hover .more-arrow {
+    transform: translateX(7px);
+}
+.more-btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+</style>
+    
+    <script>
 var globalDirectLinkUrl = "https://pinurl.to/k50egDV"; 
         var isBackgroundCoolDown = false; 
 
