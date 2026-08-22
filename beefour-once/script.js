@@ -1299,6 +1299,7 @@ function renderDetail(slug) {
         >
             Browser Anda tidak mendukung pemutaran video HTML5.
         </video>
+        <div id="vastAdContainer" class="vast-ad-container"></div>
 
     </div>
 
