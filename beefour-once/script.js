@@ -1307,7 +1307,7 @@ function renderDetail(slug) {
              ================================================= -->
 
         <div class="video-player">
-    <div class="video-player__shell">
+    <div id="videoShell" class="video-player__shell">
 
         <video
             id="mainVideo"
@@ -1321,7 +1321,7 @@ function renderDetail(slug) {
         <div id="vastAdContainer" class="vast-ad-container"></div>
         </div>
         <!-- CUSTOM VIDEO CONTROLS -->
-    <div class="custom-controls" id="customControls">
+    <video id="mainVideo" class="main-video" playsinline preload="metadata">
 
       <!-- PLAY -->
       <button
