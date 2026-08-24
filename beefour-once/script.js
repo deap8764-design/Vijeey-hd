@@ -14,7 +14,7 @@
 
 const SMARTLINK_URL = "https://www.profitableratecpmnetwork.com/t43u33iyx5?key=2ae9dfead6d65bda1889c6a2e30810b1";
 const VAST_AD_TAG_URL =
-  "https://vast.yomeno.xyz/vast?spot_id=1499640";
+  ".";
 /*
   Jika Popunder provider Anda menggunakan script <script src="..."></script>
   di <head>, provider tersebut dapat berjalan sendiri.
