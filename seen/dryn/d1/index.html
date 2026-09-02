@@ -1,1 +1,603 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Been-stream video</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #0f172a;
+      --line: #e2e8f0;
+      --btn: #111827;
+      --btnText: #ffffff;
+      --btnHover: #000000;
+      --muted: #475569;
+      --danger: #b91c1c;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.45;
+      overflow-x: hidden;
+    }
+
+    .appbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: saturate(180%) blur(8px);
+      -webkit-backdrop-filter: saturate(180%) blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .bar-inner {
+      width: 100%;
+      max-width: 1200px;
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .logo {
+      display: inline-grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #111827;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .spacer { flex: 1; }
+
+    .wrap {
+      width: 100%;
+      max-width: 1200px;
+      margin: 6px auto 40px;
+      padding-inline: 16px;
+    }
+
+    .player-shell {
+      display: grid;
+      place-items: center;
+      margin-top: 20px;
+    }
+
+    .phone {
+      position: relative;
+      width: clamp(240px, 92vw, 420px);
+      aspect-ratio: 9 / 16;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 10px 30px rgba(2, 6, 23, 0.15);
+    }
+
+    .phone video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    .video-overlay.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .video-overlay.is-disabled {
+      cursor: default;
+    }
+
+    .play-btn-icon {
+      width: 68px;
+      height: 68px;
+      background: rgba(17, 24, 39, 0.85);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .video-overlay:hover .play-btn-icon {
+      transform: scale(1.08);
+    }
+
+    .play-btn-icon::before {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0;
+      margin-left: 5px;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-left: 20px solid #ffffff;
+    }
+
+    .error-message {
+      position: absolute;
+      inset: auto 12px 12px;
+      z-index: 12;
+      display: none;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(127, 29, 29, 0.92);
+      color: #fff;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .direct-link {
+      display: block;
+      width: clamp(240px, 92vw, 420px);
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--btn);
+      color: var(--btnText);
+      text-align: center;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .direct-link:hover {
+      background: var(--btnHover);
+      transform: translateY(-1px);
+    }
+
+    .schedule-info {
+      width: clamp(240px, 92vw, 420px);
+      margin-top: 10px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .schedule-info strong { color: var(--text); }
+
+    @media (min-width: 1024px) {
+      .wrap {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 480px) minmax(0, 1fr);
+      }
+
+      .player-shell { grid-column: 2; }
+    }
+  </style>
+
+  <script>
+    (function (s) {
+      s.dataset.zone = '11636357';
+      s.src = 'https://al5sm.com/tag.min.js';
+    })(
+      [document.documentElement, document.body]
+        .filter(Boolean)
+        .pop()
+        .appendChild(document.createElement('script'))
+    );
+  </script>
+</head>
+<body>
+  <header class="appbar">
+    <div class="bar-inner">
+      <a class="brand js-smartlink" href="#" target="_blank" rel="noopener noreferrer">
+        <span class="logo">B</span>
+        <span>Been.stream</span>
+      </a>
+      <div class="spacer"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="player-shell">
+      <div class="phone">
+        <div id="videoOverlay" class="video-overlay" role="button" tabindex="0" aria-label="Putar video">
+          <div class="play-btn-icon" aria-hidden="true"></div>
+        </div>
+
+        <video
+          id="myVideo"
+          playsinline
+          preload="metadata"
+          controlslist="nodownload"
+          aria-label="Pemutar video"
+        ></video>
+
+        <div id="videoError" class="error-message" role="alert"></div>
+      </div>
+
+      <div id="scheduleInfo" class="schedule-info" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      'use strict';
+
+      var overlay = document.getElementById('videoOverlay');
+      var video = document.getElementById('myVideo');
+      var scheduleInfo = document.getElementById('scheduleInfo');
+      var videoError = document.getElementById('videoError');
+
+      var smartlinkElements = document.querySelectorAll('.js-smartlink');
+
+      /* =========================================================
+         SMARTLINK: cukup ubah URL di SATU tempat ini.
+         JavaScript akan memakai URL ini untuk semua trigger smartlink.
+         ========================================================= */
+      var AD_CONFIG = {
+        smartlinkUrl: 'https://pinurl.to/g3UUtP1'
+      };
+
+      var smartlinkUrl = AD_CONFIG.smartlinkUrl;
+      var SCHEDULE_START_DATE = '2026-08-28';
+      var TIME_ZONE = 'Asia/Jakarta';
+      var VIDEO_DURATION_DAYS = 1;
+
+      function setupSmartlinkLinks() {
+        smartlinkElements.forEach(function (element) {
+          element.href = smartlinkUrl;
+        });
+      }
+
+      var scheduledVideos = [
+        '../../../assets/VID-20260809-WA0069.mp4',
+        '../../../assets/VID-20260809-WA0090.mp4',
+        '../../../assets/VID-20260809-WA0137.mp4',
+        '../../../assets/VID-20260809-WA0136.mp4',
+        '../../../assets/VID-20260809-WA0087.mp4',
+        '../../../assets/VID-20260809-WA0070.mp4',
+        '../../../assets/VID-20260809-WA0143.mp4',
+        '../../../assets/VID-20260809-WA0050.mp4',
+        '../../../assets/VID-20260809-WA0138.mp4',
+        '../../../assets/VID-20260809-WA0073.mp4',
+        '../../../assets/VID-20260809-WA0071.mp4',
+        '../../../assets/VID-20260809-WA0052.mp4',
+        '../../../assets/VID-20260809-WA0143.mp4',
+        '../../../assets/VID-20260809-WA0053.mp4',
+        '../../../assets/VID-20260809-WA0091.mp4',
+        '../../../assets/VID-20260809-WA0132.mp4',
+        '../../../assets/VID-20260809-WA0135.mp4',
+        '../../../assets/VID-20260809-WA0094.mp4',
+        '../../../assets/VID-20260809-WA0092.mp4',
+        '../../../assets/VID-20260809-WA0140.mp4',
+        '../../../assets/VID-20260809-WA0141.mp4',
+        '../../../assets/VID-20260809-WA0133.mp4',
+        '../../../assets/VID-20260809-WA0051.mp4',
+        '../../../assets/VID-20260809-WA0134.mp4',
+        '../../../assets/VID-20260809-WA0049.mp4',
+        '../../../assets/VID-20260809-WA0089.mp4',
+        '../../../assets/VID-20260809-WA0139.mp4',
+        '../../../assets/VID-20260809-WA0135.mp4',
+        '../../../assets/VID-20260809-WA0072.mp4',
+        '../../../assets/VID-20260809-WA0142.mp4',
+      ];
+
+      var state = {
+        currentIndex: -1,
+        currentUrl: '',
+        userStarted: false,
+        adOpened: false,
+        adCooldownUntil: 0,
+        switching: false,
+        timer: null,
+        clockTimer: null
+      };
+
+      var AD_COOLDOWN_MS = 10000; // 10 detik
+
+      function parseDateOnly(dateString) {
+        var parts = dateString.split('-').map(Number);
+        return new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+      }
+
+      function getJakartaDateParts() {
+        var parts = new Intl.DateTimeFormat('en-CA', {
+          timeZone: TIME_ZONE,
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }).formatToParts(new Date());
+
+        var result = {};
+        parts.forEach(function (part) {
+          if (part.type !== 'literal') result[part.type] = part.value;
+        });
+
+        return {
+          year: Number(result.year),
+          month: Number(result.month),
+          day: Number(result.day)
+        };
+      }
+
+      function getJakartaDateOnly() {
+        var parts = getJakartaDateParts();
+        return new Date(Date.UTC(parts.year, parts.month - 1, parts.day));
+      }
+
+      function formatDate(date) {
+        var day = String(date.getUTCDate()).padStart(2, '0');
+        var month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        var year = date.getUTCFullYear();
+        return day + '-' + month + '-' + year;
+      }
+
+      function getScheduleState() {
+        var startDate = parseDateOnly(SCHEDULE_START_DATE);
+        var todayDateOnly = getJakartaDateOnly();
+        var diffMs = todayDateOnly.getTime() - startDate.getTime();
+        var diffDays = Math.floor(diffMs / 86400000);
+        var safeDays = Math.max(diffDays, 0);
+        var videoIndex = Math.floor(safeDays / VIDEO_DURATION_DAYS) % scheduledVideos.length;
+        var cycleDay = videoIndex + 1;
+        var activeDate = new Date(startDate.getTime());
+        activeDate.setUTCDate(activeDate.getUTCDate() + safeDays);
+
+        return {
+          videoIndex: videoIndex,
+          cycleDay: cycleDay,
+          today: todayDateOnly,
+          activeDate: activeDate,
+          beforeStart: diffDays < 0,
+          diffDays: diffDays
+        };
+      }
+
+      function getFileName(path) {
+        var cleanPath = path.split('/').pop() || path;
+        try {
+          return decodeURIComponent(cleanPath);
+        } catch (error) {
+          return cleanPath;
+        }
+      }
+
+      function updateScheduleInfo(scheduleState) {
+        var fileName = getFileName(scheduledVideos[scheduleState.videoIndex]);
+        scheduleInfo.innerHTML =
+          '<strong>Active</strong>' +
+          ' &nbsp;•&nbsp; Screening ' + VIDEO_DURATION_DAYS + ' Day'
+      }
+
+      function showVideoError(message) {
+        videoError.textContent = message;
+        videoError.style.display = 'block';
+      }
+
+      function hideVideoError() {
+        videoError.textContent = '';
+        videoError.style.display = 'none';
+      }
+
+      function safeOpenSmartlink() {
+        if (!smartlinkUrl) return false;
+
+        var now = Date.now();
+
+        // Saat cooldown aktif, jangan buka smartlink lagi.
+        if (now < state.adCooldownUntil) {
+          return false;
+        }
+
+        var popup = window.open(smartlinkUrl, '_blank', 'noopener,noreferrer');
+
+        // Tetap mulai cooldown setelah trigger smartlink.
+        state.adOpened = true;
+        state.adCooldownUntil = now + AD_COOLDOWN_MS;
+
+        if (!popup) {
+          // Popup diblokir browser, tetapi cooldown tetap berjalan agar
+          // trigger tidak ditembak berulang-ulang.
+          return false;
+        }
+
+        return true;
+      }
+
+      function handleSmartlinkClick(event) {
+        if (event) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        safeOpenSmartlink();
+      }
+
+      function startPlayback() {
+        video.play().catch(function () {
+          video.muted = true;
+          video.play().catch(function () {
+            // User masih bisa menekan play dari kontrol native.
+          });
+        });
+      }
+
+      function showOverlay() {
+        overlay.classList.remove('is-hidden');
+        overlay.setAttribute('aria-hidden', 'false');
+      }
+
+      function hideOverlay() {
+        overlay.classList.add('is-hidden');
+        overlay.setAttribute('aria-hidden', 'true');
+      }
+
+      function applyScheduledVideo(options) {
+        options = options || {};
+
+        if (!scheduledVideos.length) {
+          showVideoError('Tidak ada video terjadwal.');
+          scheduleInfo.textContent = 'Tidak ada video terjadwal.';
+          return;
+        }
+
+        var scheduleState = getScheduleState();
+        var selectedUrl = scheduledVideos[scheduleState.videoIndex];
+        var indexChanged = scheduleState.videoIndex !== state.currentIndex;
+        var sourceChanged = selectedUrl !== state.currentUrl;
+        var shouldResume = Boolean(options.resume) && state.userStarted;
+
+        updateScheduleInfo(scheduleState);
+
+        if (!indexChanged && !sourceChanged) return;
+        if (state.switching) return;
+
+        state.switching = true;
+        hideVideoError();
+
+        var wasPlaying = !video.paused && !video.ended;
+        if (wasPlaying) shouldResume = true;
+
+        function cleanup() {
+          video.removeEventListener('canplay', onReady);
+          video.removeEventListener('error', onError);
+        }
+
+        function onReady() {
+          cleanup();
+          state.switching = false;
+
+          if (shouldResume) {
+            startPlayback();
+          }
+        }
+
+        function onError() {
+          cleanup();
+          state.switching = false;
+          showVideoError('Video tidak dapat dimuat: ' + getFileName(selectedUrl));
+        }
+
+        // Pasang listener sebelum mengganti source agar event load/error tidak terlewat.
+        video.addEventListener('canplay', onReady);
+        video.addEventListener('error', onError);
+
+        video.pause();
+        state.currentIndex = scheduleState.videoIndex;
+        state.currentUrl = selectedUrl;
+        video.src = selectedUrl;
+        video.load();
+
+        // Sebagian browser bisa sudah memiliki data yang cukup segera setelah load().
+        if (video.readyState >= 3) onReady();
+      }
+
+      function startScheduleWatcher() {
+        if (state.clockTimer) clearInterval(state.clockTimer);
+
+        // Cek kalender WIB tiap 15 detik. Ini menjaga pergantian video tetap terdeteksi
+        // walau timer browser mengalami sedikit throttling/background delay.
+        state.clockTimer = setInterval(checkScheduleChange, 15000);
+      }
+
+      function checkScheduleChange() {
+        var newState = getScheduleState();
+        if (newState.videoIndex !== state.currentIndex) {
+          applyScheduledVideo({ resume: state.userStarted });
+        } else {
+          updateScheduleInfo(newState);
+        }
+      }
+
+      function handleFirstPlayInteraction(event) {
+        if (event) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        safeOpenSmartlink();
+        state.userStarted = true;
+        video.controls = true;
+        hideOverlay();
+        startPlayback();
+      }
+
+      // Overlay awal: klik pertama bisa memicu smartlink.
+      overlay.addEventListener('click', handleFirstPlayInteraction);
+
+      // Link/ tombol smartlink mengikuti cooldown 10 detik.
+      smartlinkElements.forEach(function (element) {
+        element.addEventListener('click', handleSmartlinkClick);
+      });
+
+      // Setelah overlay hilang, klik area video juga dapat memicu smartlink
+      // selama cooldown sudah selesai. Pemutaran video tetap tidak diblokir.
+      video.addEventListener('click', function () {
+        safeOpenSmartlink();
+      });
+      overlay.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          handleFirstPlayInteraction(event);
+        }
+      });
+
+      video.addEventListener('error', function () {
+        var source = video.currentSrc || state.currentUrl;
+        if (source) {
+          showVideoError('Video gagal dimuat: ' + getFileName(source));
+        }
+      });
+
+      video.addEventListener('loadeddata', hideVideoError);
+
+      video.addEventListener('ended', function () {
+        // Tidak mengganti video berdasarkan event ended.
+        // Pergantian tetap ditentukan kalender WIB agar 1 video = 1 hari.
+      });
+
+      // Pasang URL smartlink dari satu konfigurasi saja.
+      setupSmartlinkLinks();
+
+      // Inisialisasi sumber berdasarkan tanggal WIB saat halaman dibuka.
+      applyScheduledVideo();
+      startScheduleWatcher();
+    });
+  </script>
+</body>
+</html>
 
