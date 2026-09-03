@@ -1,0 +1,2778 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#100d1b">
+  <meta name="description" content="nuvio.HD - Website streaming film modern.">
+
+  <title>nuvio.HD - Streaming Video</title>
+
+  <style>
+    :root {
+      --bg-main: #09070e;
+      --bg-secondary: #120d1d;
+      --bg-card: rgba(24, 19, 35, 0.88);
+      --bg-card-strong: #191329;
+      --purple: #8f58ff;
+      --purple-dark: #321c59;
+      --violet: #6c3ad8;
+      --orange: #ff8c42;
+      --yellow: #ffd84d;
+      --mint: #b7ffd5;
+      --text-main: #f7f3ff;
+      --text-soft: #bbb4ca;
+      --text-muted: #80788f;
+      --white-alpha: rgba(255,255,255,0.08);
+      --border-alpha: rgba(255,255,255,0.10);
+      --shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.45);
+      --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.30);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --player-ratio: 16 / 9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg-main);
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text-main);
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background:
+        radial-gradient(circle at 8% 5%, rgba(125, 67, 255, 0.25), transparent 28%),
+        radial-gradient(circle at 95% 12%, rgba(92, 50, 180, 0.18), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(102, 53, 180, 0.20), transparent 38%),
+        linear-gradient(145deg, #08070d 0%, #0d0915 36%, #160d24 70%, #0a0710 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        linear-gradient(
+          120deg,
+          transparent 0%,
+          rgba(255,255,255,0.015) 25%,
+          transparent 50%,
+          rgba(255,255,255,0.012) 75%,
+          transparent 100%
+        );
+      background-size: 300% 300%;
+      animation: ambientShift 18s ease-in-out infinite;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(255, 216, 77, 0.85);
+      outline-offset: 3px;
+    }
+
+    ::selection {
+      background: rgba(255, 140, 66, 0.35);
+      color: #fff;
+    }
+
+    .page-shell {
+      width: min(100% - 24px, 1080px);
+      margin: 0 auto;
+      padding: 18px 0 34px;
+    }
+
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    .brand {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      color: #fff;
+      text-decoration: none;
+      font-size: clamp(1.75rem, 6vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      text-shadow:
+        0 0 10px rgba(186, 141, 255, 0.35),
+        0 0 35px rgba(115, 55, 220, 0.20);
+    }
+
+    .brand span {
+      color: #cdb7ff;
+    }
+
+    .brand::after {
+      content: "";
+      position: absolute;
+      width: 45%;
+      height: 7px;
+      left: 4px;
+      bottom: -8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--orange), transparent);
+      opacity: 0.65;
+      filter: blur(1px);
+    }
+
+    .next-btn {
+      min-height: 44px;
+      padding: 10px 17px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #07100b;
+      background: linear-gradient(135deg, #d3ffe2, #aaffcd);
+      border: 1px solid rgba(255,255,255,0.32);
+      border-radius: 14px;
+      box-shadow:
+        0 8px 25px rgba(103, 255, 158, 0.13),
+        inset 0 1px 0 rgba(255,255,255,0.55);
+      font-weight: 850;
+      font-size: 0.92rem;
+      cursor: pointer;
+      user-select: none;
+      transition:
+        transform 180ms ease,
+        filter 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .next-btn:hover {
+      transform: translateY(-2px) scale(1.025);
+      filter: brightness(1.05);
+      box-shadow:
+        0 12px 28px rgba(103, 255, 158, 0.18),
+        inset 0 1px 0 rgba(255,255,255,0.60);
+    }
+
+    .next-btn:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    .intro-card {
+      position: relative;
+      overflow: visible;
+      margin-bottom: 16px;
+      padding: 22px 86px 22px 20px;
+      border: 1px solid var(--border-alpha);
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(8, 7, 12, 0.90),
+          rgba(23, 16, 36, 0.82)
+        );
+      box-shadow:
+        0 15px 35px rgba(0,0,0,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.035);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      animation: slideUp 0.8s 0.08s ease both;
+    }
+
+    .intro-card p {
+      color: #e3deeb;
+      font-size: clamp(0.88rem, 2.2vw, 1rem);
+      font-weight: 500;
+      line-height: 1.7;
+      letter-spacing: 0.005em;
+    }
+
+    .new-badge {
+      position: absolute;
+      top: -13px;
+      right: 14px;
+      width: 70px;
+      height: 70px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background:
+        linear-gradient(145deg, #ff4b38 0%, #ff7547 55%, #e53121 100%);
+      border: 2px solid rgba(255,255,255,0.25);
+      box-shadow:
+        0 12px 28px rgba(255, 72, 44, 0.30),
+        0 0 0 6px rgba(255, 75, 56, 0.055);
+      font-size: 0.78rem;
+      font-weight: 950;
+      letter-spacing: 0.05em;
+      transform: rotate(8deg);
+      clip-path: polygon(
+        50% 0%,
+        61% 12%,
+        76% 6%,
+        82% 21%,
+        98% 22%,
+        92% 39%,
+        100% 50%,
+        88% 61%,
+        94% 78%,
+        78% 78%,
+        72% 94%,
+        58% 86%,
+        50% 100%,
+        40% 87%,
+        24% 95%,
+        21% 79%,
+        4% 78%,
+        11% 61%,
+        0% 51%,
+        11% 39%,
+        4% 21%,
+        21% 21%,
+        25% 6%,
+        40% 13%
+      );
+      animation: badgeFloat 3.8s ease-in-out infinite;
+    }
+
+    .stream-card {
+      overflow: hidden;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(49, 37, 67, 0.94),
+          rgba(25, 19, 39, 0.96)
+        );
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      animation: slideUp 0.85s 0.12s ease both;
+    }
+
+    .player-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: var(--player-ratio);
+      border: 6px solid #040307;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at center, rgba(140,84,255,0.10), transparent 45%),
+        #020203;
+      box-shadow:
+        0 20px 45px rgba(0,0,0,0.42),
+        inset 0 1px 0 rgba(255,255,255,0.025);
+      isolation: isolate;
+    }
+
+    .player-wrap.player-changing {
+      animation: playerSwap 400ms ease;
+    }
+
+    .video-element {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      background: #020203;
+    }
+
+    .video-element::-webkit-media-controls {
+      display: none !important;
+    }
+
+    .video-element::-webkit-media-controls-enclosure {
+      display: none !important;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(142, 92, 255, 0.12),
+          transparent 48%
+        ),
+        linear-gradient(135deg, rgba(0,0,0,0.12), rgba(36,21,66,0.13));
+      transition: opacity 240ms ease;
+    }
+
+    .video-placeholder.hidden {
+      opacity: 0;
+    }
+
+    .play-big {
+      width: clamp(65px, 14vw, 92px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      padding-left: 4px;
+      color: #110e17;
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      border: 2px solid rgba(255,255,255,0.42);
+      border-radius: 50%;
+      box-shadow:
+        0 18px 38px rgba(0,0,0,0.38),
+        0 0 40px rgba(255, 170, 60, 0.13);
+      cursor: pointer;
+      pointer-events: auto;
+      transition:
+        transform 180ms ease,
+        filter 180ms ease;
+    }
+
+    .play-big:hover {
+      transform: scale(1.06);
+      filter: brightness(1.07);
+    }
+
+    .play-big:active {
+      transform: scale(0.94);
+    }
+
+    .play-big svg {
+      width: 38%;
+      height: 38%;
+      fill: currentColor;
+    }
+
+    .player-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      pointer-events: none;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.86) 0%,
+        rgba(0,0,0,0.38) 17%,
+        rgba(0,0,0,0.0) 48%
+      );
+      opacity: 0;
+      transition: opacity 220ms ease;
+    }
+
+    .player-wrap.controls-visible .player-overlay,
+    .player-wrap:hover .player-overlay {
+      opacity: 1;
+    }
+
+    .center-pause {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 5;
+      width: 62px;
+      height: 62px;
+      display: grid;
+      place-items: center;
+      transform: translate(-50%, -50%);
+      color: #151016;
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(255,255,255,0.50);
+      border-radius: 50%;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.32);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 180ms ease,
+        transform 180ms ease;
+    }
+
+    .center-pause.show {
+      opacity: 1;
+      pointer-events: auto;
+      animation: centerPulse 320ms ease;
+    }
+
+    .center-pause svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .progress-area {
+      padding: 0 10px 8px;
+      pointer-events: auto;
+    }
+
+    .progress-track {
+      position: relative;
+      width: 100%;
+      height: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.17);
+      touch-action: none;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--yellow), var(--orange));
+      box-shadow: 0 0 12px rgba(255,168,54,0.30);
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 5px 7px;
+      pointer-events: auto;
+    }
+
+    .control-btn {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: transparent;
+      border-radius: 11px;
+      cursor: pointer;
+      transition:
+        background 160ms ease,
+        transform 160ms ease,
+        color 160ms ease;
+    }
+
+    .control-btn:hover {
+      background: rgba(255,255,255,0.10);
+      transform: translateY(-1px);
+    }
+
+    .control-btn:active {
+      transform: scale(0.94);
+    }
+
+    .control-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .volume-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .volume-slider {
+      width: 0;
+      max-width: 76px;
+      height: 4px;
+      appearance: none;
+      -webkit-appearance: none;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      opacity: 0;
+      transition:
+        width 180ms ease,
+        opacity 180ms ease;
+    }
+
+    .volume-wrap:hover .volume-slider,
+    .volume-wrap:focus-within .volume-slider {
+      width: 68px;
+      opacity: 1;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: -200px 0 0 200px #fff;
+    }
+
+    .volume-slider::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border: 0;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .time-label {
+      margin-left: auto;
+      color: rgba(255,255,255,0.87);
+      font-size: 0.72rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .film-now-playing {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      z-index: 5;
+      max-width: calc(100% - 28px);
+      padding: 7px 11px;
+      overflow: hidden;
+      color: rgba(255,255,255,0.93);
+      background: rgba(8, 6, 13, 0.64);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 999px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+      backdrop-filter: blur(9px);
+      -webkit-backdrop-filter: blur(9px);
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .status-pill {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 5;
+      padding: 7px 11px;
+      color: #ffe9bd;
+      background: rgba(68, 39, 8, 0.72);
+      border: 1px solid rgba(255, 183, 83, 0.18);
+      border-radius: 999px;
+      font-size: 0.69rem;
+      font-weight: 800;
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .status-pill.visible {
+      opacity: 1;
+    }
+
+    .film-info {
+      position: relative;
+      margin-top: 14px;
+      padding-bottom: 4px;
+    }
+
+    .ribbon {
+      position: relative;
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      margin: 0 10px;
+      color: #dad2e9;
+      background:
+        linear-gradient(90deg, #26153f, #2f1b4e 48%, #26153f);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 14px 28px rgba(0,0,0,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.025);
+      border-radius: 14px;
+      isolation: isolate;
+    }
+
+    .ribbon::before,
+    .ribbon::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      z-index: -1;
+      width: 22px;
+      height: 100%;
+      background: #190f29;
+    }
+
+    .ribbon::before {
+      left: -21px;
+      clip-path: polygon(100% 0, 100% 100%, 0 50%);
+    }
+
+    .ribbon::after {
+      right: -21px;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
+
+    .film-meta {
+      width: 100%;
+    }
+
+    .film-label {
+      display: block;
+      margin-bottom: 4px;
+      color: #a692c9;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .film-description {
+      color: #e8e3f2;
+      font-size: clamp(0.80rem, 2.1vw, 0.96rem);
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    .film-title-heading {
+      margin-top: 16px;
+      padding: 0 5px;
+      color: #fff;
+      font-size: clamp(1rem, 2.8vw, 1.32rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .film-list {
+      margin-top: 10px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .film-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 48px;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .film-button {
+      min-width: 0;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 13px 16px;
+      color: #141011;
+      background: linear-gradient(135deg, #ffe66e 0%, #ffd84d 38%, #ff8c42 100%);
+      border: 1px solid rgba(255,255,255,0.34);
+      border-radius: 17px;
+      box-shadow:
+        0 10px 24px rgba(255, 144, 66, 0.13),
+        inset 0 1px 0 rgba(255,255,255,0.55);
+      cursor: pointer;
+      text-align: left;
+      font-size: clamp(0.83rem, 2.5vw, 0.96rem);
+      font-weight: 900;
+      line-height: 1.25;
+      transition:
+        transform 170ms ease,
+        box-shadow 170ms ease,
+        filter 170ms ease;
+    }
+
+    .film-button:hover {
+      transform: translateY(-2px) scale(1.01);
+      filter: brightness(1.04);
+      box-shadow:
+        0 15px 30px rgba(255, 144, 66, 0.20),
+        inset 0 1px 0 rgba(255,255,255,0.60);
+    }
+
+    .film-button:active {
+      transform: translateY(1px) scale(0.985);
+    }
+
+    .film-button.active {
+      box-shadow:
+        0 0 0 2px rgba(255,255,255,0.24),
+        0 16px 32px rgba(255, 140, 66, 0.22),
+        inset 0 1px 0 rgba(255,255,255,0.60);
+    }
+
+    .film-button .button-arrow {
+      flex: 0 0 auto;
+      font-size: 1.02rem;
+    }
+
+    .bookmark-btn {
+      min-height: 54px;
+      display: grid;
+      place-items: center;
+      color: #d7cef2;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(147, 104, 210, 0.18),
+          rgba(87, 48, 132, 0.22)
+        );
+      border: 1px solid rgba(255,255,255,0.11);
+      border-radius: 17px;
+      box-shadow:
+        0 8px 22px rgba(0,0,0,0.20),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+      cursor: pointer;
+      transition:
+        transform 170ms ease,
+        background 170ms ease,
+        color 170ms ease,
+        box-shadow 170ms ease;
+    }
+
+    .bookmark-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(159,117,224,0.22);
+    }
+
+    .bookmark-btn:active {
+      transform: scale(0.94);
+    }
+
+    .bookmark-btn.active {
+      color: #ffe06a;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255, 216, 77, 0.18),
+          rgba(255, 140, 66, 0.12)
+        );
+      box-shadow:
+        0 10px 24px rgba(255, 179, 69, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      animation: bookmarkBounce 360ms ease;
+    }
+
+    .bookmark-btn svg {
+      width: 23px;
+      height: 23px;
+      fill: currentColor;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    .ad-note {
+      margin-top: 14px;
+      min-height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 6px;
+      color: rgba(218, 207, 238, 0.62);
+      font-size: 0.68rem;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .footer {
+      padding: 30px 0 4px;
+      text-align: center;
+      animation: fadeIn 1s 0.3s ease both;
+    }
+
+    .footer-title {
+      font-size: clamp(2rem, 8vw, 3.35rem);
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -0.06em;
+      color: transparent;
+      background: linear-gradient(90deg, #ff9c48, #ff4f38 70%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow:
+        0 0 25px rgba(255, 104, 60, 0.10);
+    }
+
+    .copyright {
+      margin-top: 10px;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      z-index: 100;
+      width: min(calc(100% - 26px), 420px);
+      padding: 12px 15px;
+      transform: translate(-50%, 25px);
+      color: #f7f1ff;
+      background: rgba(19, 13, 28, 0.92);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      box-shadow: 0 16px 38px rgba(0,0,0,0.34);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      opacity: 0;
+      pointer-events: none;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.4;
+      transition:
+        opacity 220ms ease,
+        transform 220ms ease;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    @keyframes ambientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes badgeFloat {
+      0%, 100% {
+        transform: translateY(0) rotate(8deg);
+      }
+      50% {
+        transform: translateY(-5px) rotate(6deg);
+      }
+    }
+
+    @keyframes playerSwap {
+      0% {
+        opacity: 0.55;
+        transform: scale(0.99);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes centerPulse {
+      0% {
+        transform: translate(-50%, -50%) scale(0.75);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    @keyframes bookmarkBounce {
+      0% { transform: scale(0.88); }
+      55% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    @media (min-width: 600px) {
+      .page-shell {
+        width: min(100% - 40px, 1080px);
+        padding-top: 25px;
+      }
+
+      .stream-card {
+        padding: 18px;
+      }
+
+      .film-list {
+        gap: 12px;
+      }
+
+      .film-row {
+        grid-template-columns: minmax(0, 1fr) 54px;
+      }
+
+      .bookmark-btn,
+      .film-button {
+        min-height: 58px;
+      }
+    }
+
+    @media (min-width: 820px) {
+      .page-shell {
+        width: min(100% - 56px, 1080px);
+      }
+
+      .top-header {
+        margin-bottom: 22px;
+      }
+
+      .intro-card {
+        padding: 24px 108px 24px 25px;
+      }
+
+      .stream-card {
+        padding: 22px;
+      }
+
+      .film-list {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .film-row:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .film-row:last-child .film-button {
+        max-width: calc(50% - 31px);
+      }
+
+      .footer {
+        padding-top: 42px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .page-shell {
+        padding-top: 32px;
+        padding-bottom: 42px;
+      }
+
+      .intro-card {
+        margin-bottom: 20px;
+      }
+
+      .stream-card {
+        padding: 24px;
+      }
+
+      .player-wrap {
+        border-radius: 30px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .page-shell {
+        width: min(100% - 16px, 1080px);
+      }
+
+      .top-header {
+        gap: 10px;
+      }
+
+      .next-btn {
+        min-height: 40px;
+        padding: 8px 13px;
+        font-size: 0.82rem;
+      }
+
+      .intro-card {
+        padding: 19px 72px 19px 17px;
+      }
+
+      .new-badge {
+        width: 62px;
+        height: 62px;
+        right: 9px;
+      }
+
+      .stream-card {
+        padding: 9px;
+        border-radius: 24px;
+      }
+
+      .player-wrap {
+        border-width: 4px;
+        border-radius: 22px;
+      }
+
+      .ribbon {
+        margin-inline: 7px;
+        padding-inline: 16px;
+      }
+
+      .ribbon::before {
+        left: -16px;
+      }
+
+      .ribbon::after {
+        right: -16px;
+      }
+
+      .film-row {
+        grid-template-columns: minmax(0, 1fr) 44px;
+        gap: 6px;
+      }
+
+      .film-button,
+      .bookmark-btn {
+        min-height: 50px;
+        border-radius: 15px;
+      }
+
+      .film-button {
+        padding-inline: 13px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      body::before {
+        animation: none !important;
+      }
+    }
+  </style>
+  <script src="https://pl30962034.profitableratecpmnetwork.com/87/4b/e5/874be571fe58cbcfb3409159684b7912.js"></script>
+
+</head>
+
+<body>
+  <main class="page-shell">
+
+    <header class="top-header">
+      <a href="#" class="brand" aria-label="nuvio.HD home">
+        nuvio<span>.HD</span>
+      </a>
+
+      <button
+        id="nextBtn"
+        class="next-btn"
+        type="button"
+        aria-label="Putar film berikutnya"
+      >
+        next →
+      </button>
+    </header>
+
+    <section class="intro-card" aria-label="Informasi website">
+      <div class="new-badge" aria-hidden="true">NEW!</div>
+
+      <p>
+        Tonton Video Terbaru...
+      </p>
+    </section>
+
+    <section class="stream-card" aria-label="Streaming player">
+
+      <div
+        id="playerWrap"
+        class="player-wrap"
+        tabindex="0"
+        aria-label="Video player"
+      >
+        <video
+          id="videoPlayer"
+          class="video-element"
+          preload="metadata"
+          playsinline
+          crossorigin="anonymous"
+        >
+          <source id="videoSource" src="YOUR_VIDEO_URL.mp4" type="video/mp4">
+          Browser Anda tidak mendukung pemutar video HTML5.
+        </video>
+
+        <div id="videoPlaceholder" class="video-placeholder">
+          <button
+            id="bigPlayBtn"
+            class="play-big"
+            type="button"
+            aria-label="Putar video"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 5.4v13.2c0 .8.9 1.3 1.6.9l10.2-6.6c.7-.5.7-1.4 0-1.8L9.6 4.5C8.9 4.1 8 4.6 8 5.4Z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div id="filmNowPlaying" class="film-now-playing">
+          Film 1
+        </div>
+
+        <div id="statusPill" class="status-pill" aria-live="polite">
+          Iklan siap
+        </div>
+
+        <button
+          id="centerPause"
+          class="center-pause"
+          type="button"
+          aria-label="Pause video"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 5.5a1 1 0 0 1 1.5-.86l8.3 4.8a1 1 0 0 1 0 1.72l-8.3 4.8A1 1 0 0 1 7 15.1V5.5Z"></path>
+          </svg>
+        </button>
+
+        <div id="playerOverlay" class="player-overlay">
+          <div class="progress-area">
+            <div
+              id="progressTrack"
+              class="progress-track"
+              role="slider"
+              aria-label="Progress video"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+              tabindex="0"
+            >
+              <div id="progressFill" class="progress-fill"></div>
+            </div>
+          </div>
+
+          <div class="control-row">
+
+            <button
+              id="playPauseBtn"
+              class="control-btn"
+              type="button"
+              aria-label="Putar video"
+            >
+              <svg id="playPauseIcon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 5.4v13.2c0 .8.9 1.3 1.6.9l10.2-6.6c.7-.5.7-1.4 0-1.8L9.6 4.5C8.9 4.1 8 4.6 8 5.4Z"></path>
+              </svg>
+            </button>
+
+            <div class="volume-wrap">
+              <button
+                id="muteBtn"
+                class="control-btn"
+                type="button"
+                aria-label="Matikan suara"
+              >
+                <svg id="volumeIcon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 1.1a1 1 0 0 0-1.4 1.4 2.1 2.1 0 0 1 0 3 1 1 0 0 0 1.4 1.4 4.1 4.1 0 0 0 0-5.8Zm2.2-2.2a1 1 0 0 0-1.4 1.4 5.2 5.2 0 0 1 0 7.4 1 1 0 1 0 1.4 1.4 7.2 7.2 0 0 0 0-10.2Z"></path>
+                </svg>
+              </button>
+
+              <input
+                id="volumeSlider"
+                class="volume-slider"
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value="1"
+                aria-label="Volume"
+              >
+            </div>
+
+            <div id="timeLabel" class="time-label">
+              00:00 / 00:00
+            </div>
+
+            <button
+              id="fullscreenBtn"
+              class="control-btn"
+              type="button"
+              aria-label="Fullscreen"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 4a1 1 0 0 0-1 1v5h2V6h4V4H5Zm14 0h-5v2h4v4h2V5a1 1 0 0 0-1-1ZM4 14v5a1 1 0 0 0 1 1h5v-2H6v-4H4Zm14 0v4h-4v2h5a1 1 0 0 0 1-1v-5h-2Z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <section class="film-info" aria-label="Informasi film">
+
+        <div class="ribbon">
+          <div class="film-meta">
+            <span class="film-label">Deskripsi</span>
+            <p id="filmDescription" class="film-description">
+              deskripsi untuk per film...
+            </p>
+          </div>
+        </div>
+
+        <h2 id="filmTitleHeading" class="film-title-heading">
+          Film 1
+        </h2>
+
+        <div id="filmList" class="film-list" aria-label="Daftar film">
+          <!-- Film buttons dibuat otomatis oleh JavaScript -->
+        </div>
+
+        <p id="adStatus" class="ad-note" aria-live="polite">
+          Interaksi pertama dapat membuka smartlink. Cooldown global: 15 detik.
+        </p>
+      </section>
+    </section>
+
+    <footer class="footer">
+      <h2 class="footer-title">Enjoy For watch.</h2>
+      <p class="copyright">©2026</p>
+    </footer>
+
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /*
+      ================================================================
+      CONFIGURATION
+      ================================================================
+      Ganti smartlink di bawah ini dengan smartlink MILIK ANDA.
+      Jangan ubah nama property jika tidak diperlukan.
+    */
+
+    const CONFIG = {
+      smartlinkUrl: "https://www.profitableratecpmnetwork.com/t43u33iyx5?key=2ae9dfead6d65bda1889c6a2e30810b1",
+      adCooldown: 15000
+    };
+
+
+    /*
+      ================================================================
+      FILM DATA
+      ================================================================
+      Anda cukup mengganti:
+      - title
+      - video
+      - description
+
+      Sistem otomatis mengambil 5 video sesuai hari:
+      Hari 1  -> Film 1-5
+      Hari 2  -> Film 6-10
+      ...
+      Hari 14 -> Film 66-70
+      Lalu kembali ke Film 1-5.
+
+      Contoh:
+      video: "https://domain.com/video.mp4"
+
+      Bisa juga menggunakan path lokal:
+      video: "videos/film-1.mp4"
+    */
+
+    /*
+      Urutan jadwal:
+      Hari 1  = Film 1 - 5
+      Hari 2  = Film 6 - 10
+      Hari 3  = Film 11 - 15
+      ...
+      Hari 14 = Film 66 - 70
+      Setelah itu kembali ke Film 1 - 5.
+
+      Ganti VIDEO_URL_1 sampai VIDEO_URL_70 dengan URL/path video Anda.
+    */
+    const films = [
+      {
+        title: "Film 1",
+        video: "../../assets/VID-20260809-WA0049.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/VID-20260809-WA0050.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/VID-20260809-WA0051.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/VID-20260809-WA0052.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/VID-20260809-WA0053.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/VID-20260809-WA0069.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/VID-20260809-WA0070.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/VID-20260809-WA0071.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/VID-20260809-WA0072.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/VID-20260809-WA0073.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/VID-20260809-WA0087.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/VID-20260809-WA0089.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/VID-20260809-WA0090.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/VID-20260809-WA0091.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/VID-20260809-WA0092.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/VID-20260809-WA0094.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/VID-20260809-WA0132.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/VID-20260809-WA0133.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/VID-20260809-WA0134.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/VID-20260809-WA0135.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/VID-20260809-WA0136.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/VID-20260809-WA0137.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/VID-20260809-WA0138.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/VID-20260809-WA0139.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/VID-20260809-WA0140.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/VID-20260809-WA0141.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/VID-20260809-WA0142.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/VID-20260809-WA0143.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/ln1/VID-20260512-WA0021.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/ln1/VID-20260808-WA0163.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/ln1/VID-20260808-WA0164.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/ln1/VID-20260808-WA0165.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/ln1/VID-20260809-WA0048.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/ln1/VID-20260809-WA0074.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/ln1/VID-20260809-WA0075.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/ln1/VID-20260809-WA0076.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/ln1/VID-20260809-WA0077.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/ln1/VID-20260809-WA0078.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/ln1/VID-20260809-WA0079.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/ln1/VID-20260809-WA0080.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/ln1/VID-20260809-WA0082.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/ln1/VID-20260809-WA0106.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/ln1/VID-20260809-WA0107.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/ln1/VID-20260809-WA0108.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/ln1/VID-20260809-WA0109.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/ln1/VID-20260809-WA0110.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/ln1/VID-20260809-WA0111.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/ln1/VID-20260809-WA0128.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/ln1/VID-20260809-WA0129.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/ln1/VID-20260809-WA0130.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/ln1/VID-20260809-WA0131.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/ln2/VID-20260808-WA0158.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/ln2/VID-20260808-WA0160.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/ln2/VID-20260808-WA0161.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/ln2/VID-20260808-WA0162.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/ln2/VID-20260809-WA0052.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/ln2/VID-20260809-WA0059.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/ln2/VID-20260809-WA0060.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/ln2/VID-20260809-WA0081.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/ln2/VID-20260809-WA0083.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/ln2/VID-20260809-WA0084.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/ln2/VID-20260809-WA0085.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/ln2/VID-20260809-WA0086.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/ln2/VID-20260809-WA0088.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/ln2/VID-20260809-WA0093.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      },
+      {
+        title: "Film 1",
+        video: "../../assets/ln2/VID-20260809-WA0095.mp4",
+        description: "Keindahan yang tenang, sederhana, dan terasa menyegarkan."
+      },
+      {
+        title: "Film 2",
+        video: "../../assets/ln2/VID-20260809-WA0096.mp4",
+        description: "Pesona lembut yang menghadirkan suasana hangat dan damai."
+      },
+      {
+        title: "Film 3",
+        video: "../../assets/ln2/VID-20260809-WA0097.mp4",
+        description: "Nuansa indah dengan pemandangan yang memanjakan mata."
+      },
+      {
+        title: "Film 4",
+        video: "../../assets/ln2/VID-20260809-WA0098.mp4",
+        description: "Momen cantik yang terasa ringan, nyaman, dan menenangkan."
+      },
+      {
+        title: "Film 5",
+        video: "../../assets/ln2/VID-20260809-WA0099.mp4",
+        description: "Keindahan alami yang membawa suasana cerah dan menyenangkan."
+      }
+    ];
+
+
+    /*
+      ================================================================
+      GLOBAL STATE
+      ================================================================
+    */
+
+    /*
+      ================================================================
+      SCHEDULED VIDEO SWITCHER
+      ================================================================
+      14 hari x 5 video = 70 video.
+      Setiap hari hanya 5 video aktif.
+      Setelah hari ke-14, jadwal kembali ke hari/batch pertama.
+
+      Penentuan hari memakai satu timestamp global (UTC), sehingga semua
+      pengunjung melihat batch yang sama pada waktu global yang sama.
+    */
+
+    const SCHEDULE_CONFIG = {
+      days: 14,
+      videosPerDay: 5,
+      totalVideos: 70,
+      checkInterval: 1000,
+
+      // TITIK AWAL JADWAL GLOBAL.
+      // Isi dengan waktu commit/deploy pertama (format ISO + UTC).
+      // Contoh: "2026-09-03T05:00:00Z"
+      // Semua pengunjung akan mengikuti siklus yang sama dari titik ini.
+      startAt: "2026-09-03T04:47:00Z"
+    };
+
+    let currentFilmIndex = 0;
+    let currentScheduleDay = null;
+    let lastAdTime = 0;
+    let bookmarks = [];
+
+    let controlsTimer = null;
+    let centerPauseTimer = null;
+    let toastTimer = null;
+    let scheduleTimer = null;
+
+
+    /*
+      ================================================================
+      ELEMENT REFERENCES
+      ================================================================
+    */
+
+    const video = document.getElementById("videoPlayer");
+    const videoSource = document.getElementById("videoSource");
+
+    const playerWrap = document.getElementById("playerWrap");
+    const videoPlaceholder = document.getElementById("videoPlaceholder");
+    const bigPlayBtn = document.getElementById("bigPlayBtn");
+
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const playPauseIcon = document.getElementById("playPauseIcon");
+
+    const centerPause = document.getElementById("centerPause");
+
+    const muteBtn = document.getElementById("muteBtn");
+    const volumeIcon = document.getElementById("volumeIcon");
+    const volumeSlider = document.getElementById("volumeSlider");
+
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+    const progressTrack = document.getElementById("progressTrack");
+    const progressFill = document.getElementById("progressFill");
+
+    const timeLabel = document.getElementById("timeLabel");
+
+    const filmNowPlaying = document.getElementById("filmNowPlaying");
+    const filmTitleHeading = document.getElementById("filmTitleHeading");
+    const filmDescription = document.getElementById("filmDescription");
+    const filmList = document.getElementById("filmList");
+
+    const nextBtn = document.getElementById("nextBtn");
+
+    const statusPill = document.getElementById("statusPill");
+    const adStatus = document.getElementById("adStatus");
+
+    const toast = document.getElementById("toast");
+
+
+    /*
+      ================================================================
+      UTILITY
+      ================================================================
+    */
+
+    function escapeHTML(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatTime(seconds) {
+      if (!Number.isFinite(seconds) || seconds < 0) {
+        return "00:00";
+      }
+
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const secs = Math.floor(seconds % 60);
+
+      const hh = String(hours).padStart(2, "0");
+      const mm = String(minutes).padStart(2, "0");
+      const ss = String(secs).padStart(2, "0");
+
+      return hours > 0
+        ? `${hh}:${mm}:${ss}`
+        : `${mm}:${ss}`;
+    }
+
+    function showToast(message) {
+      clearTimeout(toastTimer);
+
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2400);
+    }
+
+
+    /*
+      ================================================================
+      SMARTLINK / AD SYSTEM
+      ================================================================
+      Penting:
+      - Tidak ada auto-click.
+      - Tidak ada invisible overlay.
+      - Tidak ada redirect otomatis.
+      - Smartlink hanya dipanggil dari interaksi user.
+      - Satu global cooldown untuk seluruh elemen.
+    */
+
+    function canTriggerAd() {
+      const now = Date.now();
+
+      return (
+        now - lastAdTime >= CONFIG.adCooldown
+        && typeof CONFIG.smartlinkUrl === "string"
+        && CONFIG.smartlinkUrl.trim() !== ""
+        && CONFIG.smartlinkUrl !== "https://YOUR-SMARTLINK-HERE.com"
+      );
+    }
+
+    function updateAdCooldown() {
+      const now = Date.now();
+      const elapsed = now - lastAdTime;
+      const remaining = Math.max(0, CONFIG.adCooldown - elapsed);
+
+      if (remaining <= 0) {
+        statusPill.textContent = "Iklan siap";
+        statusPill.classList.remove("visible");
+
+        adStatus.textContent =
+          "Pilih salah satu tombol untuk menonton.";
+
+        return;
+      }
+
+      const seconds = Math.ceil(remaining / 1000);
+
+      statusPill.textContent = `Cooldown ${seconds}s`;
+      statusPill.classList.add("visible");
+
+      adStatus.textContent =
+        `Smartlink cooldown ${seconds} detik. Semua tombol dan player tetap berfungsi normal.`;
+    }
+
+    function triggerSmartlink() {
+      /*
+        Jangan memanggil fungsi ini secara otomatis.
+        Fungsi ini hanya dipanggil dari event interaksi pengguna.
+      */
+
+      if (!canTriggerAd()) {
+        updateAdCooldown();
+        return false;
+      }
+
+      /*
+        Simpan timestamp SEBELUM navigasi/open.
+        Dengan begitu cooldown berlaku global setelah trigger.
+      */
+      lastAdTime = Date.now();
+
+      try {
+        const openedWindow = window.open(
+          CONFIG.smartlinkUrl,
+          "_blank",
+          "noopener,noreferrer"
+        );
+
+        if (!openedWindow) {
+          /*
+            Fallback jika browser memblokir popup.
+            location.assign tetap berasal dari event klik user.
+          */
+          window.location.assign(CONFIG.smartlinkUrl);
+        }
+
+        showToast("Smartlink dibuka. Cooldown 15 detik aktif.");
+      } catch (error) {
+        /*
+          Fallback tetap aman dan tetap membutuhkan event user
+          yang sedang terjadi.
+        */
+        try {
+          window.location.href = CONFIG.smartlinkUrl;
+        } catch (fallbackError) {
+          console.error("Smartlink gagal dibuka:", fallbackError);
+        }
+      }
+
+      updateAdCooldown();
+
+      return true;
+    }
+
+    /*
+      Satu pintu untuk seluruh interaksi monetisasi.
+    */
+    function handleInteractiveAdTrigger() {
+      if (canTriggerAd()) {
+        triggerSmartlink();
+      } else {
+        updateAdCooldown();
+      }
+    }
+
+
+    /*
+      ================================================================
+      SCHEDULED VIDEO SWITCHER
+      ================================================================
+    */
+
+    function getGlobalScheduleStartMs() {
+      const parsed = Date.parse(SCHEDULE_CONFIG.startAt);
+
+      if (!Number.isFinite(parsed)) {
+        console.error("SCHEDULE_CONFIG.startAt tidak valid:", SCHEDULE_CONFIG.startAt);
+        return Date.UTC(1970, 0, 1);
+      }
+
+      return parsed;
+    }
+
+    function getScheduleDayIndex(date = new Date()) {
+      /*
+        Jadwal GLOBAL: tidak bergantung pada tanggal/jam perangkat user.
+        Hari ke-n dihitung dari satu timestamp tetap (startAt) dalam UTC.
+        Siklus berjalan terus berdasarkan waktu dunia, walaupun tidak ada
+        pengunjung yang sedang membuka website.
+      */
+      const elapsedMs = date.getTime() - getGlobalScheduleStartMs();
+      const elapsedDays = Math.floor(elapsedMs / 86400000);
+
+      return ((elapsedDays % SCHEDULE_CONFIG.days) + SCHEDULE_CONFIG.days)
+        % SCHEDULE_CONFIG.days;
+    }
+
+    function getScheduleKey(date = new Date()) {
+      const elapsedMs = date.getTime() - getGlobalScheduleStartMs();
+      const cycleDay = Math.floor(elapsedMs / 86400000);
+
+      return String(cycleDay);
+    }
+
+    function getTodayFilmIndexes() {
+      const scheduleDay = getScheduleDayIndex();
+      const start = scheduleDay * SCHEDULE_CONFIG.videosPerDay;
+
+      return Array.from(
+        { length: SCHEDULE_CONFIG.videosPerDay },
+        (_, offset) => start + offset
+      );
+    }
+
+    function getTodayFilmIndex(globalIndex) {
+      const todayIndexes = getTodayFilmIndexes();
+
+      const localPosition = todayIndexes.indexOf(globalIndex);
+
+      if (localPosition >= 0) {
+        return localPosition;
+      }
+
+      return 0;
+    }
+
+    function getScheduleLabel() {
+      const scheduleDay = getScheduleDayIndex() + 1;
+      const startNumber =
+        ((scheduleDay - 1) * SCHEDULE_CONFIG.videosPerDay) + 1;
+      const endNumber =
+        scheduleDay * SCHEDULE_CONFIG.videosPerDay;
+
+      return `Hari ${scheduleDay}/14 • Film ${startNumber}-${endNumber}`;
+    }
+
+    function syncScheduledFilm(force = false) {
+      const scheduleDay = getScheduleDayIndex();
+      const scheduleKey = getScheduleKey();
+
+      if (!force && currentScheduleDay === scheduleKey) {
+        return false;
+      }
+
+      currentScheduleDay = scheduleKey;
+
+      const todayIndexes = getTodayFilmIndexes();
+
+      /*
+        Cari film aktif yang sedang diputar.
+        Jika tidak termasuk batch hari ini, mulai dari film pertama
+        pada batch hari ini.
+      */
+      const currentGlobalIndex = currentFilmIndex;
+
+      let newPosition = todayIndexes.indexOf(currentGlobalIndex);
+
+      if (newPosition < 0) {
+        newPosition = 0;
+      }
+
+      /*
+        Pastikan currentFilmIndex selalu menunjuk ke film global
+        dalam batch aktif hari ini.
+      */
+      currentFilmIndex = todayIndexes[newPosition];
+
+      filmNowPlaying.textContent = films[currentFilmIndex].title;
+      filmTitleHeading.textContent = films[currentFilmIndex].title;
+      filmDescription.textContent = films[currentFilmIndex].description;
+
+      renderFilmButtons();
+
+      if (force || currentGlobalIndex !== currentFilmIndex) {
+        setVideoSource(films[currentFilmIndex].video);
+        video.currentTime = 0;
+        video.pause();
+        videoPlaceholder.classList.remove("hidden");
+        progressFill.style.width = "0%";
+        progressTrack.setAttribute("aria-valuenow", "0");
+        updatePlayPauseIcon();
+        updatePlayerTime();
+
+        showToast(`Jadwal berganti: ${getScheduleLabel()}`);
+      }
+
+      /*
+        Tambahkan informasi jadwal ke status teks yang sudah ada.
+      */
+      const remainingSeconds = Math.ceil(
+        Math.max(0, CONFIG.adCooldown - (Date.now() - lastAdTime)) / 1000
+      );
+
+      adStatus.textContent = remainingSeconds > 0
+        ? `Smartlink cooldown ${remainingSeconds} detik. Semua tombol dan player tetap berfungsi normal.`
+        : "Pilih salah satu tombol untuk menonton.";
+
+      return true;
+    }
+
+    function startScheduleWatcher() {
+      clearInterval(scheduleTimer);
+
+      /*
+        Cek setiap detik agar pergantian hari terjadi otomatis walaupun
+        halaman tetap terbuka tanpa reload.
+      */
+      scheduleTimer = setInterval(() => {
+        const todayKey = getScheduleKey();
+
+        if (todayKey !== currentScheduleDay) {
+          syncScheduledFilm(true);
+        }
+      }, SCHEDULE_CONFIG.checkInterval);
+    }
+
+    /*
+      ================================================================
+      BOOKMARK SYSTEM
+      ================================================================
+    */
+
+    function saveBookmarks() {
+      try {
+        localStorage.setItem(
+          "zeelflex_bookmarks",
+          JSON.stringify(bookmarks)
+        );
+      } catch (error) {
+        console.warn("Bookmark tidak dapat disimpan:", error);
+      }
+    }
+
+    function loadBookmarks() {
+      try {
+        const stored = localStorage.getItem("zeelflex_bookmarks");
+
+        if (!stored) {
+          bookmarks = [];
+          return;
+        }
+
+        const parsed = JSON.parse(stored);
+
+        if (Array.isArray(parsed)) {
+          bookmarks = parsed.filter(
+            index => Number.isInteger(index) && index >= 0
+          );
+        } else {
+          bookmarks = [];
+        }
+      } catch (error) {
+        bookmarks = [];
+        console.warn("Bookmark gagal dimuat:", error);
+      }
+    }
+
+    function isBookmarked(index) {
+      return bookmarks.includes(index);
+    }
+
+    function toggleBookmark(index) {
+      if (!Number.isInteger(index) || index < 0 || index >= films.length) {
+        return;
+      }
+
+      if (isBookmarked(index)) {
+        bookmarks = bookmarks.filter(item => item !== index);
+        showToast(`${films[index].title} dihapus dari bookmark.`);
+      } else {
+        bookmarks.push(index);
+        showToast(`${films[index].title} disimpan ke bookmark.`);
+      }
+
+      saveBookmarks();
+      renderFilmButtons();
+    }
+
+
+    /*
+      ================================================================
+      FILM LIST UI
+      ================================================================
+    */
+
+    function bookmarkSVG() {
+      return `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6.5 4.7A1.7 1.7 0 0 1 8.2 3h7.6a1.7 1.7 0 0 1 1.7 1.7v15.1c0 .9-1 1.4-1.7.9L12 18.1l-3.8 2.6c-.7.5-1.7 0-1.7-.9V4.7Z"></path>
+        </svg>
+      `;
+    }
+
+    function renderFilmButtons() {
+      filmList.innerHTML = "";
+
+      const todayIndexes = getTodayFilmIndexes();
+
+      todayIndexes.forEach((globalIndex, dayPosition) => {
+        const film = films[globalIndex];
+        const row = document.createElement("div");
+        row.className = "film-row";
+
+        const filmButton = document.createElement("button");
+        filmButton.type = "button";
+        filmButton.className = "film-button";
+
+        if (globalIndex === currentFilmIndex) {
+          filmButton.classList.add("active");
+        }
+
+        filmButton.setAttribute(
+          "aria-label",
+          `Putar ${film.title}`
+        );
+
+        filmButton.innerHTML = `
+          <span>${escapeHTML(film.title)}</span>
+          <span class="button-arrow">→</span>
+        `;
+
+        filmButton.addEventListener("click", () => {
+          handleInteractiveAdTrigger();
+          loadFilm(globalIndex);
+        });
+
+        const bookmarkButton = document.createElement("button");
+        bookmarkButton.type = "button";
+        bookmarkButton.className = "bookmark-btn";
+
+        if (isBookmarked(globalIndex)) {
+          bookmarkButton.classList.add("active");
+        }
+
+        bookmarkButton.setAttribute(
+          "aria-label",
+          isBookmarked(globalIndex)
+            ? `Hapus ${film.title} dari bookmark`
+            : `Simpan ${film.title} ke bookmark`
+        );
+
+        bookmarkButton.setAttribute(
+          "aria-pressed",
+          String(isBookmarked(globalIndex))
+        );
+
+        bookmarkButton.innerHTML = bookmarkSVG();
+
+        bookmarkButton.addEventListener("click", (event) => {
+          event.stopPropagation();
+          handleInteractiveAdTrigger();
+          toggleBookmark(globalIndex);
+        });
+
+        row.appendChild(filmButton);
+        row.appendChild(bookmarkButton);
+
+        filmList.appendChild(row);
+      });
+
+      /*
+        Update heading status agar pengunjung tahu batch hari ini.
+      */
+    }
+
+
+
+    /*
+      ================================================================
+      VIDEO PLAYER
+      ================================================================
+    */
+
+    function updatePlayPauseIcon() {
+      if (video.paused) {
+        playPauseIcon.innerHTML = `
+          <path d="M8 5.4v13.2c0 .8.9 1.3 1.6.9l10.2-6.6c.7-.5.7-1.4 0-1.8L9.6 4.5C8.9 4.1 8 4.6 8 5.4Z"></path>
+        `;
+
+        playPauseBtn.setAttribute("aria-label", "Putar video");
+      } else {
+        playPauseIcon.innerHTML = `
+          <path d="M7 5h3v14H7V5Zm7 0h3v14h-3V5Z"></path>
+        `;
+
+        playPauseBtn.setAttribute("aria-label", "Pause video");
+      }
+    }
+
+    function updateVolumeIcon() {
+      if (video.muted || video.volume === 0) {
+        volumeIcon.innerHTML = `
+          <path d="M4 9v6h4l5 4V5L8 9H4Zm13.7 1.3L16.3 11.7l1.7 1.7-1.7 1.7 1.4 1.4 1.7-1.7 1.7 1.7 1.4-1.4-1.7-1.7 1.7-1.7-1.4-1.4-1.7 1.7-1.7-1.7-1.4 1.3Z"></path>
+        `;
+
+        muteBtn.setAttribute("aria-label", "Aktifkan suara");
+      } else {
+        volumeIcon.innerHTML = `
+          <path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 1.1a1 1 0 0 0-1.4 1.4 2.1 2.1 0 0 1 0 3 1 1 0 0 0 1.4 1.4 4.1 4.1 0 0 0 0-5.8Zm2.2-2.2a1 1 0 0 0-1.4 1.4 5.2 5.2 0 0 1 0 7.4 1 1 0 1 0 1.4 1.4 7.2 7.2 0 0 0 0-10.2Z"></path>
+        `;
+
+        muteBtn.setAttribute("aria-label", "Matikan suara");
+      }
+    }
+
+    function updatePlayerTime() {
+      const current = video.currentTime || 0;
+      const duration = Number.isFinite(video.duration)
+        ? video.duration
+        : 0;
+
+      const percentage = duration > 0
+        ? (current / duration) * 100
+        : 0;
+
+      progressFill.style.width = `${percentage}%`;
+
+      progressTrack.setAttribute(
+        "aria-valuenow",
+        String(Math.round(percentage))
+      );
+
+      timeLabel.textContent =
+        `${formatTime(current)} / ${formatTime(duration)}`;
+    }
+
+    function setVideoSource(url) {
+      video.pause();
+
+      const isPlaceholder =
+        !url ||
+        url === "YOUR_VIDEO_URL.mp4" ||
+        url.startsWith("VIDEO_URL_");
+
+      if (isPlaceholder) {
+        videoSource.removeAttribute("src");
+        video.load();
+        return;
+      }
+
+      videoSource.src = url;
+      video.load();
+    }
+
+    function loadFilm(index, { scroll = true } = {}) {
+      if (!Number.isInteger(index)) {
+        return;
+      }
+
+      if (index < 0 || index >= films.length) {
+        return;
+      }
+
+      const todayIndexes = getTodayFilmIndexes();
+
+      /*
+        Pengunjung hanya boleh berpindah di dalam 5 video yang aktif
+        untuk hari ini.
+      */
+      if (!todayIndexes.includes(index)) {
+        index = todayIndexes[0];
+      }
+
+      currentFilmIndex = index;
+
+      const film = films[index];
+
+      playerWrap.classList.remove("player-changing");
+      void playerWrap.offsetWidth;
+      playerWrap.classList.add("player-changing");
+
+      filmTitleHeading.textContent = film.title;
+      filmDescription.textContent = film.description;
+      filmNowPlaying.textContent = film.title;
+
+      setVideoSource(film.video);
+
+      video.currentTime = 0;
+
+      progressFill.style.width = "0%";
+      progressTrack.setAttribute("aria-valuenow", "0");
+
+      videoPlaceholder.classList.remove("hidden");
+
+      updatePlayPauseIcon();
+      updateVolumeIcon();
+      updatePlayerTime();
+
+      renderFilmButtons();
+
+      playerWrap.setAttribute(
+        "aria-label",
+        `Video player untuk ${film.title}`
+      );
+
+      if (scroll && window.innerWidth < 700) {
+        playerWrap.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
+
+      window.setTimeout(() => {
+        playerWrap.classList.remove("player-changing");
+      }, 450);
+    }
+
+
+    function nextFilm() {
+      handleInteractiveAdTrigger();
+
+      const todayIndexes = getTodayFilmIndexes();
+      const currentPosition = todayIndexes.indexOf(currentFilmIndex);
+
+      const nextPosition =
+        currentPosition >= 0
+          ? (currentPosition + 1) % todayIndexes.length
+          : 0;
+
+      loadFilm(todayIndexes[nextPosition]);
+    }
+
+
+    function togglePlayPause() {
+      /*
+        Ini adalah aksi user nyata.
+        Smartlink hanya dieksekusi jika cooldown memungkinkan.
+      */
+      handleInteractiveAdTrigger();
+
+      if (video.paused) {
+        const playPromise = video.play();
+
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch(error => {
+            console.warn("Playback gagal:", error);
+            showToast("Video belum dapat diputar. Cek URL videonya.");
+          });
+        }
+      } else {
+        video.pause();
+      }
+    }
+
+    function showCenterPause() {
+      clearTimeout(centerPauseTimer);
+
+      if (video.paused) {
+        centerPause.classList.remove("show");
+        return;
+      }
+
+      centerPause.classList.add("show");
+
+      centerPauseTimer = setTimeout(() => {
+        centerPause.classList.remove("show");
+      }, 850);
+    }
+
+    function toggleControls() {
+      playerWrap.classList.add("controls-visible");
+
+      clearTimeout(controlsTimer);
+
+      controlsTimer = setTimeout(() => {
+        if (!video.paused) {
+          playerWrap.classList.remove("controls-visible");
+        }
+      }, 2800);
+    }
+
+    function seekVideo(clientX) {
+      const rect = progressTrack.getBoundingClientRect();
+
+      if (rect.width <= 0 || !Number.isFinite(video.duration)) {
+        return;
+      }
+
+      const ratio = Math.min(
+        1,
+        Math.max(
+          0,
+          (clientX - rect.left) / rect.width
+        )
+      );
+
+      video.currentTime = ratio * video.duration;
+      updatePlayerTime();
+    }
+
+    async function toggleFullscreen() {
+      /*
+        Klik fullscreen juga merupakan interaksi user.
+      */
+      handleInteractiveAdTrigger();
+
+      try {
+        if (!document.fullscreenElement) {
+          if (playerWrap.requestFullscreen) {
+            await playerWrap.requestFullscreen();
+          } else if (video.webkitEnterFullscreen) {
+            video.webkitEnterFullscreen();
+          } else {
+            showToast("Fullscreen tidak didukung browser ini.");
+          }
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch (error) {
+        console.warn("Fullscreen gagal:", error);
+      }
+    }
+
+
+    /*
+      ================================================================
+      INIT PLAYER
+      ================================================================
+    */
+
+    function initPlayer() {
+      loadBookmarks();
+
+      /*
+        Tentukan batch sesuai tanggal hari ini sebelum merender player.
+      */
+      currentScheduleDay = getScheduleKey();
+
+      const todayIndexes = getTodayFilmIndexes();
+      currentFilmIndex = todayIndexes[0];
+
+      renderFilmButtons();
+      loadFilm(currentFilmIndex, { scroll: false });
+      startScheduleWatcher();
+
+      video.volume = 1;
+      video.muted = false;
+
+      updateVolumeIcon();
+      updatePlayPauseIcon();
+      updatePlayerTime();
+      updateAdCooldown();
+
+      /*
+        Native video click.
+        Klik video kosong dihitung sebagai interaksi user.
+      */
+      let videoClickTimer = null;
+
+      video.addEventListener("click", () => {
+        clearTimeout(videoClickTimer);
+
+        videoClickTimer = window.setTimeout(() => {
+          handleInteractiveAdTrigger();
+          toggleControls();
+
+          if (video.paused) {
+            const promise = video.play();
+
+            if (promise && typeof promise.catch === "function") {
+              promise.catch(() => {});
+            }
+          } else {
+            video.pause();
+          }
+        }, 180);
+      });
+
+      /*
+        Play / pause controls.
+      */
+      bigPlayBtn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        togglePlayPause();
+      });
+
+      playPauseBtn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        togglePlayPause();
+      });
+
+      centerPause.addEventListener("click", (event) => {
+        event.stopPropagation();
+        togglePlayPause();
+      });
+
+      /*
+        Fullscreen.
+      */
+      fullscreenBtn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleFullscreen();
+      });
+
+      /*
+        Mute.
+      */
+      muteBtn.addEventListener("click", (event) => {
+        event.stopPropagation();
+
+        handleInteractiveAdTrigger();
+
+        video.muted = !video.muted;
+
+        if (!video.muted && video.volume === 0) {
+          video.volume = 0.7;
+          volumeSlider.value = "0.7";
+        }
+
+        updateVolumeIcon();
+      });
+
+      /*
+        Volume.
+      */
+      volumeSlider.addEventListener("input", () => {
+        /*
+          Slider input adalah interaksi nyata.
+          Tidak memanggil smartlink di setiap perubahan kecil agar
+          pengalaman penggunaan volume tetap nyaman.
+        */
+        video.volume = Number(volumeSlider.value);
+
+        if (video.volume > 0) {
+          video.muted = false;
+        }
+
+        updateVolumeIcon();
+      });
+
+      volumeSlider.addEventListener("change", () => {
+        handleInteractiveAdTrigger();
+      });
+
+      /*
+        Progress bar click.
+      */
+      progressTrack.addEventListener("click", (event) => {
+        event.stopPropagation();
+
+        handleInteractiveAdTrigger();
+        seekVideo(event.clientX);
+      });
+
+      /*
+        Progress keyboard.
+      */
+      progressTrack.addEventListener("keydown", (event) => {
+        const duration = video.duration;
+
+        if (!Number.isFinite(duration)) {
+          return;
+        }
+
+        let targetTime = video.currentTime;
+
+        if (event.key === "ArrowRight") {
+          targetTime += 5;
+        } else if (event.key === "ArrowLeft") {
+          targetTime -= 5;
+        } else {
+          return;
+        }
+
+        event.preventDefault();
+
+        handleInteractiveAdTrigger();
+
+        video.currentTime = Math.min(
+          duration,
+          Math.max(0, targetTime)
+        );
+
+        updatePlayerTime();
+      });
+
+      /*
+        Player keyboard shortcuts.
+      */
+      playerWrap.addEventListener("keydown", event => {
+        /*
+          Jangan mengambil alih keyboard ketika user
+          sedang berada di slider volume / progress.
+        */
+        if (
+          event.target === volumeSlider ||
+          event.target === progressTrack
+        ) {
+          return;
+        }
+
+        if (event.code === "Space") {
+          event.preventDefault();
+          togglePlayPause();
+        }
+
+        if (event.key.toLowerCase() === "f") {
+          event.preventDefault();
+          toggleFullscreen();
+        }
+
+        if (event.key.toLowerCase() === "m") {
+          event.preventDefault();
+
+          handleInteractiveAdTrigger();
+
+          video.muted = !video.muted;
+          updateVolumeIcon();
+        }
+      });
+
+      /*
+        Player hover / touch controls.
+      */
+      playerWrap.addEventListener("mousemove", () => {
+        toggleControls();
+      });
+
+      playerWrap.addEventListener("touchstart", () => {
+        toggleControls();
+      }, { passive: true });
+
+      /*
+        Update time saat video berjalan.
+      */
+      video.addEventListener("timeupdate", updatePlayerTime);
+
+      video.addEventListener("loadedmetadata", () => {
+        updatePlayerTime();
+
+        /*
+          Placeholder tetap akan hilang setelah play,
+          tetapi metadata sendiri tidak langsung memutar video.
+        */
+      });
+
+      video.addEventListener("play", () => {
+        videoPlaceholder.classList.add("hidden");
+        updatePlayPauseIcon();
+        centerPause.classList.remove("show");
+        toggleControls();
+      });
+
+      video.addEventListener("pause", () => {
+        updatePlayPauseIcon();
+        centerPause.classList.remove("show");
+        playerWrap.classList.add("controls-visible");
+      });
+
+      video.addEventListener("playing", () => {
+        videoPlaceholder.classList.add("hidden");
+        updatePlayPauseIcon();
+      });
+
+      video.addEventListener("ended", () => {
+        updatePlayPauseIcon();
+        playerWrap.classList.add("controls-visible");
+      });
+
+      video.addEventListener("error", () => {
+        videoPlaceholder.classList.remove("hidden");
+
+        /*
+          Hanya beri pesan ketika URL video memang belum diganti.
+        */
+        const currentUrl = films[currentFilmIndex].video;
+
+        if (
+          currentUrl === "YOUR_VIDEO_URL.mp4" ||
+          /^VIDEO_URL_\\d+$/.test(currentUrl)
+        ) {
+          showToast("Ganti URL video pada array films terlebih dahulu.");
+        } else {
+          showToast("Video gagal dimuat. Periksa URL atau format videonya.");
+        }
+      });
+
+      /*
+        Double click pada player:
+        fullscreen tetap merupakan aksi user nyata.
+      */
+      video.addEventListener("dblclick", () => {
+        clearTimeout(videoClickTimer);
+        toggleFullscreen();
+      });
+
+      /*
+        Next button.
+      */
+      nextBtn.addEventListener("click", () => {
+        nextFilm();
+      });
+
+      /*
+        Touch feedback untuk player.
+      */
+      playerWrap.addEventListener("pointerdown", () => {
+        toggleControls();
+      });
+
+      /*
+        Klik background player bukan overlay.
+      */
+      playerWrap.addEventListener("click", event => {
+        if (
+          event.target === playerWrap &&
+          !video.paused
+        ) {
+          showCenterPause();
+        }
+      });
+
+      /*
+        Update status cooldown ketika user kembali ke tab.
+      */
+      document.addEventListener("visibilitychange", () => {
+        updateAdCooldown();
+      });
+
+      /*
+        Timer pendek untuk menyegarkan teks cooldown.
+        Tidak digunakan untuk membuka iklan.
+      */
+      setInterval(updateAdCooldown, 1000);
+    }
+
+
+    /*
+      ================================================================
+      START
+      ================================================================
+    */
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initPlayer();
+    });
+  </script>
+</body>
+</html>
