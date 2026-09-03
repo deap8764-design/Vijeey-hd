@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Been-stream video</title>
+  <title>Topvizeyy-video</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -207,6 +207,116 @@
 
       .player-shell { grid-column: 2; }
     }
+
+    .device-floating-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+
+    z-index: 99999;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 15px;
+
+    background: linear-gradient(
+      135deg,
+      #24113f 0%,
+      #4b164f 45%,
+      #731c38 100%
+    );
+
+    color: #ffffff;
+
+    border: 1px solid #000000;
+    border-radius: 12px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  /* Efek kilap berjalan */
+  .device-floating-btn::before {
+    content: "";
+    position: absolute;
+    top: -80%;
+    left: -60%;
+
+    width: 40%;
+    height: 260%;
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.45),
+      transparent
+    );
+
+    transform: rotate(25deg);
+    animation: buttonShine 3.2s ease-in-out infinite;
+
+    pointer-events: none;
+  }
+
+  @keyframes buttonShine {
+    0% {
+      left: -60%;
+      opacity: 0;
+    }
+
+    15% {
+      opacity: 1;
+    }
+
+    45% {
+      left: 125%;
+      opacity: 0;
+    }
+
+    100% {
+      left: 125%;
+      opacity: 0;
+    }
+  }
+
+  .device-floating-btn:active {
+    transform: translateY(2px) scale(0.97);
+
+    box-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  @media (max-width: 480px) {
+    .device-floating-btn {
+      top: 30px;
+      right: -5px;
+
+      padding: 10px 20px;
+
+      font-size: 11px;
+      border-radius: 2px;
+    }
+  }
   </style>
 
   <script>
@@ -222,11 +332,19 @@
   </script>
 </head>
 <body>
+  <a
+  href="https://comein.pro/beefour-once/nuv"
+  class="device-floating-btn"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  For More →
+  </a>
   <header class="appbar">
     <div class="bar-inner">
       <a class="brand js-smartlink" href="#" target="_blank" rel="noopener noreferrer">
-        <span class="logo">B</span>
-        <span>Been.stream</span>
+        <span class="logo">V</span>
+        <span>Topvizeyy-video</span>
       </a>
       <div class="spacer"></div>
     </div>
